@@ -316,7 +316,7 @@ export type TooltipProps = {
   positionPrecedence: TooltipPosition[];
 
   onClick?: (e: any) => void;
-  tooltipClass?: string;
+  className?: string;
 };
 
 export const Tooltip = (
@@ -332,7 +332,7 @@ export const Tooltip = (
     // auto-alignment properties
     autoPosition = true,
     positionPrecedence = [],
-    tooltipClass,
+    className,
     onClick,
   }: TooltipProps,
   children?: ChildDom[]
@@ -421,7 +421,7 @@ export const Tooltip = (
     {
       style: () =>
         `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};opacity: ${opacity.val}`,
-      className: () => `${tooltipClassName} introjs-${position.val} ${tooltipClass || ""}`,
+      className: () => `${tooltipClassName} introjs-${position.val} ${className || ""}`,
       role: "dialog",
       onclick: onClick ?? null,
       
@@ -434,7 +434,6 @@ export const Tooltip = (
       [children],
     ]
   );
-  console.log("Tooltip class:", { tooltipClass });
 
   // apply the transition effect
   setTimeout(() => {

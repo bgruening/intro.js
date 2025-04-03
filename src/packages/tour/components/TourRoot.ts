@@ -128,7 +128,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
         doneLabel: tour.getOption("doneLabel"),
         hideNext: tour.getOption("hideNext"),
         hidePrev: tour.getOption("hidePrev"),
-        tooltipClass: tour.getOption("tooltipClass"),
+        className: tour.getOption("tooltipClass"),
         progress: tour.getOption("showProgress"),
         progressBarAdditionalClass: tour.getOption(
           "progressBarAdditionalClass"
