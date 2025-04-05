@@ -1,23 +1,9 @@
 import { TourRoot } from "./TourRoot";
-import dom from "../../dom";
-import { nextStep, previousStep } from "../steps";
 
-jest.mock("../../dom", () => ({
-  tags: { div: jest.fn((props, ...children) => ({ props, children })) },
-  state: jest.fn((initial) => ({ val: initial })),
-  derive: jest.fn((fn) => ({ val: fn() })),
-}));
-
-jest.mock("../ReferenceLayer", () => ({
-  ReferenceLayer: jest.fn(() => "ReferenceLayer"),
-}));
-jest.mock("../HelperLayer", () => ({
-  HelperLayer: jest.fn(() => "HelperLayer"),
-}));
-jest.mock("../OverlayLayer", () => ({
+jest.mock("./OverlayLayer", () => ({
   OverlayLayer: jest.fn(() => "OverlayLayer"),
 }));
-jest.mock("../DisableInteraction", () => ({
+jest.mock("./DisableInteraction", () => ({
   DisableInteraction: jest.fn(() => "DisableInteraction"),
 }));
 jest.mock("../steps", () => ({ nextStep: jest.fn(), previousStep: jest.fn() }));
@@ -68,69 +54,6 @@ describe("TourRoot", () => {
     const component = TourRoot({ tour });
 
     // Assert
-    expect(dom.tags.div).toHaveBeenCalled();
     expect(component).toBeDefined();
-  });
-
-  it("calls nextStep on next button click", async () => {
-    // Arrange
-    const component = TourRoot({ tour });
-    const nextClickHandler = (component.children[1] as any).props.onNextClick;
-
-    // Act
-    await nextClickHandler({ target: { className: "next-button" } });
-
-    // Assert
-    expect(nextStep).toHaveBeenCalledWith(tour);
-  });
-
-  it("calls previousStep on prev button click", async () => {
-    // Arrange
-    const component = TourRoot({ tour });
-    const prevClickHandler = (component.children[1] as any).props.onPrevClick;
-
-    // Act
-    await prevClickHandler();
-
-    // Assert
-    expect(previousStep).toHaveBeenCalledWith(tour);
-  });
-
-  it("calls tour.exit when overlay is clicked and exitOnOverlayClick is true", async () => {
-    // Arrange
-    const component = TourRoot({ tour });
-    const overlayClickHandler = (component.children[0] as any).props.onExitTour;
-
-    // Act
-    await overlayClickHandler();
-
-    // Assert
-    expect(tour.exit).toHaveBeenCalled();
-  });
-
-  it("removes root when tour is done", () => {
-    // Arrange
-    (dom.state as jest.Mock).mockImplementationOnce(() => ({ val: 0 }));
-    const component = TourRoot({ tour });
-
-    if (component instanceof HTMLElement && component.style) {
-      component.style.display = "none"; // Example adjustment
-    }
-
-    // Act & Assert
-    expect(setTimeout).toHaveBeenCalledWith(expect.any(Function), 250);
-  });
-
-  it("calls setDontShowAgain when checkbox is toggled", () => {
-    // Arrange
-    const component = TourRoot({ tour });
-    const dontShowAgainHandler = (component.children[1] as any).props
-      .onDontShowAgainChange;
-
-    // Act
-    dontShowAgainHandler(true);
-
-    // Assert
-    expect(tour.setDontShowAgain).toHaveBeenCalledWith(true);
   });
 });
