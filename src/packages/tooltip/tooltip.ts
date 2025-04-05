@@ -421,10 +421,10 @@ export const Tooltip = (
     {
       style: () =>
         `top: ${top.val}; right: ${right.val}; bottom: ${bottom.val}; left: ${left.val}; margin-left: ${marginLeft.val}; margin-top: ${marginTop.val};opacity: ${opacity.val}`,
-      className: () => `${tooltipClassName} introjs-${position.val} ${className || ""}`,
+      className: () =>
+        `${tooltipClassName} introjs-${position.val} ${className || ""}`,
       role: "dialog",
       onclick: onClick ?? null,
-      
     },
     [
       TooltipArrow({

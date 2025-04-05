@@ -8,10 +8,18 @@ jest.mock("../../dom", () => ({
   derive: jest.fn((fn) => ({ val: fn() })),
 }));
 
-jest.mock("../ReferenceLayer", () => ({ ReferenceLayer: jest.fn(() => "ReferenceLayer") }));
-jest.mock("../HelperLayer", () => ({ HelperLayer: jest.fn(() => "HelperLayer") }));
-jest.mock("../OverlayLayer", () => ({ OverlayLayer: jest.fn(() => "OverlayLayer") }));
-jest.mock("../DisableInteraction", () => ({ DisableInteraction: jest.fn(() => "DisableInteraction") }));
+jest.mock("../ReferenceLayer", () => ({
+  ReferenceLayer: jest.fn(() => "ReferenceLayer"),
+}));
+jest.mock("../HelperLayer", () => ({
+  HelperLayer: jest.fn(() => "HelperLayer"),
+}));
+jest.mock("../OverlayLayer", () => ({
+  OverlayLayer: jest.fn(() => "OverlayLayer"),
+}));
+jest.mock("../DisableInteraction", () => ({
+  DisableInteraction: jest.fn(() => "DisableInteraction"),
+}));
 jest.mock("../steps", () => ({ nextStep: jest.fn(), previousStep: jest.fn() }));
 
 jest.useFakeTimers();
@@ -23,7 +31,7 @@ describe("TourRoot", () => {
     tour = {
       getCurrentStepSignal: jest.fn(() => ({ val: 0 })),
       getRefreshesSignal: jest.fn(() => ({ val: 0 })),
-      getSteps: jest.fn(() => [{ disableInteraction: false }] ),
+      getSteps: jest.fn(() => [{ disableInteraction: false }]),
       getTargetElement: jest.fn(() => "targetElement"),
       getOption: jest.fn((option: keyof typeof Option) => {
         const options = {
@@ -116,7 +124,8 @@ describe("TourRoot", () => {
   it("calls setDontShowAgain when checkbox is toggled", () => {
     // Arrange
     const component = TourRoot({ tour });
-    const dontShowAgainHandler = (component.children[1] as any).props.onDontShowAgainChange;
+    const dontShowAgainHandler = (component.children[1] as any).props
+      .onDontShowAgainChange;
 
     // Act
     dontShowAgainHandler(true);
