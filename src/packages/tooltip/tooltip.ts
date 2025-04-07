@@ -315,6 +315,8 @@ export type TooltipProps = {
   autoPosition: boolean;
   positionPrecedence: TooltipPosition[];
 
+  htmlRenderEnabled?: boolean;
+
   onClick?: (e: any) => void;
   className?: string;
 };
@@ -330,9 +332,11 @@ export const Tooltip = (
     transitionDuration = 0,
 
     // auto-alignment properties
-    autoPosition = true,
     positionPrecedence = [],
     className,
+    htmlRenderEnabled = false,
+    autoPosition = false,
+
     onClick,
   }: TooltipProps,
   children?: ChildDom[]
@@ -416,6 +420,10 @@ export const Tooltip = (
       );
     }
   });
+
+  if (htmlRenderEnabled) {
+    // if the content is HTML, we need to set the innerHTML of the tooltip
+  }
 
   const tooltip = div(
     {
