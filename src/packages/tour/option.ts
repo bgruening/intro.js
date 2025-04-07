@@ -72,6 +72,8 @@ export interface TourOptions {
   buttonClass: string;
   /* additional classes to put on progress bar */
   progressBarAdditionalClass: string;
+  /* Optional property to determine if content should be rendered as HTML */
+  htmlRenderEnabled?: boolean;
 }
 
 export function getDefaultTourOptions(): TourOptions {
@@ -113,5 +115,6 @@ export function getDefaultTourOptions(): TourOptions {
 
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
+    htmlRenderEnabled: true,
   };
 }
