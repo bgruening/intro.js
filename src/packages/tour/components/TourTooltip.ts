@@ -406,7 +406,6 @@ export type TourTooltipProps = Omit<
   dontShowAgain: boolean;
   dontShowAgainLabel: string;
   onDontShowAgainChange: (checked: boolean) => void;
-  htmlRenderEnabled?: boolean;
 };
 
 export const TourTooltip = ({
@@ -443,7 +442,6 @@ export const TourTooltip = ({
   dontShowAgain,
   onDontShowAgainChange,
   dontShowAgainLabel,
-  htmlRenderEnabled,
   ...props
 }: TourTooltipProps) => {
   const children = [];
@@ -500,7 +498,6 @@ export const TourTooltip = ({
       element: step.element as HTMLElement,
       hintMode: false,
       position,
-      htmlRenderEnabled: false,
     },
     children
   );

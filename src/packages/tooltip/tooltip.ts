@@ -315,7 +315,7 @@ export type TooltipProps = {
   autoPosition: boolean;
   positionPrecedence: TooltipPosition[];
 
-  htmlRenderEnabled?: boolean;
+  renderAsHtml?: boolean;
 
   onClick?: (e: any) => void;
   className?: string;
@@ -334,8 +334,7 @@ export const Tooltip = (
     // auto-alignment properties
     positionPrecedence = [],
     className,
-    htmlRenderEnabled = false,
-    autoPosition = false,
+    autoPosition = true,
 
     onClick,
   }: TooltipProps,
@@ -421,7 +420,7 @@ export const Tooltip = (
     }
   });
 
-  if (htmlRenderEnabled) {
+  if (renderAsHtml) {
     // if the content is HTML, we need to set the innerHTML of the tooltip
   }
 
