@@ -73,7 +73,7 @@ export interface TourOptions {
   /* additional classes to put on progress bar */
   progressBarAdditionalClass: string;
   /* Optional property to determine if content should be rendered as HTML */
-  htmlRenderEnabled?: boolean;
+  tooltipRenderAsHtml?: boolean;
 }
 
 export function getDefaultTourOptions(): TourOptions {
@@ -115,6 +115,6 @@ export function getDefaultTourOptions(): TourOptions {
 
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
-    htmlRenderEnabled: true,
+    tooltipRenderAsHtml: true,
   };
 }
