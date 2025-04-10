@@ -4,7 +4,7 @@ const { div } = dom.tags;
 
 export type tooltipContentProps = {
     text: string;
-    tooltipRenderAsHtml: boolean;
+    tooltipRenderAsHtml?: boolean;
  };
 
 export const tooltipContetnt = ({ text, tooltipRenderAsHtml }: tooltipContentProps) => {
