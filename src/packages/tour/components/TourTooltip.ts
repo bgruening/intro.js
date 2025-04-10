@@ -457,7 +457,7 @@ export const TourTooltip = ({
       { className: tooltipTextClassName },
       tooltipContetnt({
         text,
-        tooltipRenderAsHtml: props.renderAsHtml ?? false,
+        tooltipRenderAsHtml: props.renderAsHtml,
       })
     )
   );
