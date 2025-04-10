@@ -420,10 +420,6 @@ export const Tooltip = (
     }
   });
 
-  if (renderAsHtml) {
-    // if the content is HTML, we need to set the innerHTML of the tooltip
-  }
-
   const tooltip = div(
     {
       style: () =>

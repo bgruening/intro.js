@@ -145,6 +145,7 @@ export const TourRoot = ({ tour }: TourRootProps) => {
           tour.setDontShowAgain(checked);
         },
         dontShowAgainLabel: tour.getOption("dontShowAgainLabel"),
+        renderAsHtml: tour.getOption("tooltipRenderAsHtml"),
       });
 
       const disableInteraction = step.val.disableInteraction
