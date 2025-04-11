@@ -612,4 +612,32 @@ describe("Tour", () => {
       expect(mockTour.hasStarted()).toBeFalsy();
     });
   });
+
+  test("should have tooltipRenderAsHtml option set as false", async () => {
+    // Arrange
+    const mockTour = getMockTour();
+    mockTour.setOptions({
+      tooltipRenderAsHtml: false,
+    });
+
+    // Act
+    await mockTour.start();
+
+    // Assert
+    expect(mockTour.getOption("tooltipRenderAsHtml")).toBeFalsy();
+  });
+
+  test("should have tooltipRenderAsHtml option set as true", async () => {
+    // Arrange
+    const mockTour = getMockTour();
+    mockTour.setOptions({
+      tooltipRenderAsHtml: true,
+    });
+
+    // Act
+    await mockTour.start();
+
+    // Assert
+    expect(mockTour.getOption("tooltipRenderAsHtml")).toBeTruthy();
+  });
 });
