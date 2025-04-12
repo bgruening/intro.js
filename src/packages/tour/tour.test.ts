@@ -613,31 +613,42 @@ describe("Tour", () => {
     });
   });
 
-  test("should have tooltipRenderAsHtml option set as false", async () => {
-    // Arrange
-    const mockTour = getMockTour();
-    mockTour.setOptions({
-      tooltipRenderAsHtml: false,
+  describe("tooltipRenderAsHtml", () => {
+    test("should render HTML when tooltipRenderAsHtml is true", async () => {
+      const tour = new Tour();
+
+      // Arrange & Act
+      await tour
+        .setOptions({
+          tooltipRenderAsHtml: true,
+        })
+        .start();
+
+      tooltipText().innerHTML = "<b>Bold text</b> and <i>italic text</i>";
+
+      // Assert
+      expect(content(tooltipText())).toBe(
+        "<b>Bold text</b> and <i>italic text</i>"
+      );
+      expect(tooltipText().querySelector("b")?.textContent).toBe("Bold text");
+      expect(tooltipText().querySelector("i")?.textContent).toBe("italic text");
     });
+    test("should not render HTML when tooltipRenderAsHtml is false", async () => {
+      const tour = new Tour();
 
-    // Act
-    await mockTour.start();
+      // Arrange & Act
+      await tour
+        .setOptions({
+          tooltipRenderAsHtml: false,
+        })
+        .start();
 
-    // Assert
-    expect(mockTour.getOption("tooltipRenderAsHtml")).toBeFalsy();
-  });
+      tooltipText().innerHTML = "<b>Bold text</b> and <i>italic text</i>";
 
-  test("should have tooltipRenderAsHtml option set as true", async () => {
-    // Arrange
-    const mockTour = getMockTour();
-    mockTour.setOptions({
-      tooltipRenderAsHtml: true,
+      // Assert
+      expect(content(tooltipText())).toBe(
+        "<b>Bold text</b> and <i>italic text</i>"
+      );
     });
-
-    // Act
-    await mockTour.start();
-
-    // Assert
-    expect(mockTour.getOption("tooltipRenderAsHtml")).toBeTruthy();
   });
 });
