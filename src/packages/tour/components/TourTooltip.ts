@@ -23,7 +23,7 @@ import { TourStep } from "../steps";
 import { dataStepNumberAttribute } from "../dataAttributes";
 import scrollParentToElement from "../../../util/scrollParentToElement";
 import scrollTo from "../../../util/scrollTo";
-import { tooltipContetnt } from "../../tooltip/tooltipContent";
+import { TooltipContent } from "../../tooltip/tooltipContent";
 
 const { h1, div, input, label, ul, li, a } = dom.tags;
 
@@ -453,13 +453,11 @@ export const TourTooltip = ({
   children.push(Header({ title, skipLabel, onSkipClick }));
 
   children.push(
-    div(
-      { className: tooltipTextClassName },
-      tooltipContetnt({
+      TooltipContent({
         text,
         tooltipRenderAsHtml: props.renderAsHtml,
+        className: tooltipTextClassName,
       })
-    )
   );
 
   if (dontShowAgain) {

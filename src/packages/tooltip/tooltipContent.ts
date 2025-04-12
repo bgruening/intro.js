@@ -5,10 +5,13 @@ const { div } = dom.tags;
 export type tooltipContentProps = {
     text: string;
     tooltipRenderAsHtml?: boolean;
+    className?: string;
  };
 
-export const tooltipContetnt = ({ text, tooltipRenderAsHtml }: tooltipContentProps) => {
-  const container = div({});
+export const TooltipContent = ({ text, tooltipRenderAsHtml, className }: tooltipContentProps) => {
+  const container = div({
+    className: className || "introjs-tooltiptext",
+  });
 
   dom.derive(() => {
     const el = container as HTMLElement;
