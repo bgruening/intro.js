@@ -453,11 +453,11 @@ export const TourTooltip = ({
   children.push(Header({ title, skipLabel, onSkipClick }));
 
   children.push(
-      TooltipContent({
-        text,
-        tooltipRenderAsHtml: props.renderAsHtml,
-        className: tooltipTextClassName,
-      })
+    TooltipContent({
+      text,
+      tooltipRenderAsHtml: props.renderAsHtml,
+      className: tooltipTextClassName,
+    })
   );
 
   if (dontShowAgain) {
