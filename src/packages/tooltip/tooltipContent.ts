@@ -3,12 +3,16 @@ import dom from "../dom";
 const { div } = dom.tags;
 
 export type tooltipContentProps = {
-    text: string;
-    tooltipRenderAsHtml?: boolean;
-    className?: string;
- };
+  text: string;
+  tooltipRenderAsHtml?: boolean;
+  className?: string;
+};
 
-export const TooltipContent = ({ text, tooltipRenderAsHtml, className }: tooltipContentProps) => {
+export const TooltipContent = ({
+  text,
+  tooltipRenderAsHtml,
+  className,
+}: tooltipContentProps) => {
   const container = div({
     className: className || "introjs-tooltiptext",
   });
@@ -18,7 +22,7 @@ export const TooltipContent = ({ text, tooltipRenderAsHtml, className }: tooltip
     if (!el) return;
 
     // Clear existing content
-    el.innerHTML = '';
+    el.innerHTML = "";
 
     if (tooltipRenderAsHtml && text) {
       const fragment = document.createRange().createContextualFragment(text);
