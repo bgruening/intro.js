@@ -16,6 +16,7 @@ export type HintTooltipProps = Omit<
   closeButtonLabel: string;
   closeButtonClassName: string;
   className?: string;
+  renderAsHtml?: boolean;
 };
 
 export const HintTooltip = ({
@@ -25,6 +26,7 @@ export const HintTooltip = ({
   closeButtonLabel,
   closeButtonClassName,
   className,
+  renderAsHtml,
   ...props
 }: HintTooltipProps) => {
   const text = hintItem.hint;
@@ -51,7 +53,7 @@ export const HintTooltip = ({
         { className: `${tooltipTextClassName} ${className || ""}` },
         TooltipContent({
           text: text || "",
-          tooltipRenderAsHtml: props.renderAsHtml,
+          tooltipRenderAsHtml: renderAsHtml,
           className: tooltipTextClassName,
         }),
         p(hintItem.hint || ""),
