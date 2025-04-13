@@ -406,6 +406,7 @@ export type TourTooltipProps = Omit<
 
   dontShowAgain: boolean;
   dontShowAgainLabel: string;
+  renderAsHtml?: boolean;
   onDontShowAgainChange: (checked: boolean) => void;
 };
 
@@ -443,6 +444,7 @@ export const TourTooltip = ({
   dontShowAgain,
   onDontShowAgainChange,
   dontShowAgainLabel,
+  renderAsHtml,
   ...props
 }: TourTooltipProps) => {
   const children = [];
@@ -455,7 +457,7 @@ export const TourTooltip = ({
   children.push(
     TooltipContent({
       text,
-      tooltipRenderAsHtml: props.renderAsHtml,
+      tooltipRenderAsHtml: renderAsHtml,
       className: tooltipTextClassName,
     })
   );

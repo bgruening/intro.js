@@ -315,8 +315,6 @@ export type TooltipProps = {
   autoPosition: boolean;
   positionPrecedence: TooltipPosition[];
 
-  renderAsHtml?: boolean;
-
   onClick?: (e: any) => void;
   className?: string;
 };
