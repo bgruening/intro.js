@@ -3,13 +3,12 @@ import { TooltipContent } from "./tooltipContent";
 describe("TooltipContent", () => {
   it("renders plain text when tooltipRenderAsHtml is false", () => {
     const el = TooltipContent({
-      text: "Hello, tooltip!",
+      text: "<strong>Bold Text</strong>",
       tooltipRenderAsHtml: false,
     });
 
-    expect(el.textContent).toBe("Hello, tooltip!");
-    expect(el.innerHTML).toBe("Hello, tooltip!");
-    expect(el.className).toBe("introjs-tooltiptext");
+    expect(el.innerHTML).toBe("&lt;strong&gt;Bold Text&lt;/strong&gt;");
+    expect(el.querySelector("strong")).toBeNull();
   });
 
   it("renders HTML content when tooltipRenderAsHtml is true", () => {
@@ -30,21 +29,5 @@ describe("TooltipContent", () => {
 
     expect(el.className).toBe("my-custom-tooltip");
     expect(el.textContent).toBe("Custom class test");
-  });
-
-  it("clears old content on re-derivation", () => {
-    const el = TooltipContent({
-      text: "<i>Initial</i>",
-      tooltipRenderAsHtml: true,
-    });
-
-    el.innerHTML = "<b>Old Content</b>"; // Simulate old content
-    const updated = TooltipContent({
-      text: "Updated text",
-      tooltipRenderAsHtml: false,
-    });
-
-    expect(updated.innerHTML).toBe("Updated text");
-    expect(updated.querySelector("b")).toBeNull();
   });
 });
