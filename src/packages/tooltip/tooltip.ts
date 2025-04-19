@@ -330,9 +330,10 @@ export const Tooltip = (
     transitionDuration = 0,
 
     // auto-alignment properties
-    autoPosition = true,
     positionPrecedence = [],
     className,
+    autoPosition = true,
+
     onClick,
   }: TooltipProps,
   children?: ChildDom[]

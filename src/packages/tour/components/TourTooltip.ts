@@ -23,6 +23,7 @@ import { TourStep } from "../steps";
 import { dataStepNumberAttribute } from "../dataAttributes";
 import scrollParentToElement from "../../../util/scrollParentToElement";
 import scrollTo from "../../../util/scrollTo";
+import { TooltipContent } from "../../tooltip/tooltipContent";
 
 const { h1, div, input, label, ul, li, a } = dom.tags;
 
@@ -405,6 +406,7 @@ export type TourTooltipProps = Omit<
 
   dontShowAgain: boolean;
   dontShowAgainLabel: string;
+  renderAsHtml?: boolean;
   onDontShowAgainChange: (checked: boolean) => void;
 };
 
@@ -442,6 +444,7 @@ export const TourTooltip = ({
   dontShowAgain,
   onDontShowAgainChange,
   dontShowAgainLabel,
+  renderAsHtml,
   ...props
 }: TourTooltipProps) => {
   const children = [];
@@ -451,7 +454,13 @@ export const TourTooltip = ({
 
   children.push(Header({ title, skipLabel, onSkipClick }));
 
-  children.push(div({ className: tooltipTextClassName }, text));
+  children.push(
+    TooltipContent({
+      text,
+      tooltipRenderAsHtml: renderAsHtml,
+      className: tooltipTextClassName,
+    })
+  );
 
   if (dontShowAgain) {
     children.push(DontShowAgain({ dontShowAgainLabel, onDontShowAgainChange }));

@@ -2,6 +2,7 @@ import { Tooltip, TooltipProps } from "../../tooltip/tooltip";
 import dom from "../../dom";
 import { tooltipTextClassName } from "../className";
 import { HintItem } from "../hintItem";
+import { TooltipContent } from "../../tooltip/tooltipContent";
 
 const { a, p, div } = dom.tags;
 
@@ -15,6 +16,7 @@ export type HintTooltipProps = Omit<
   closeButtonLabel: string;
   closeButtonClassName: string;
   className?: string;
+  renderAsHtml?: boolean;
 };
 
 export const HintTooltip = ({
@@ -24,8 +26,11 @@ export const HintTooltip = ({
   closeButtonLabel,
   closeButtonClassName,
   className,
+  renderAsHtml,
   ...props
 }: HintTooltipProps) => {
+  const text = hintItem.hint;
+
   return Tooltip(
     {
       ...props,
@@ -46,6 +51,11 @@ export const HintTooltip = ({
     [
       div(
         { className: `${tooltipTextClassName} ${className || ""}` },
+        TooltipContent({
+          text: text || "",
+          tooltipRenderAsHtml: renderAsHtml,
+          className: tooltipTextClassName,
+        }),
         p(hintItem.hint || ""),
         closeButtonEnabled
           ? a(
