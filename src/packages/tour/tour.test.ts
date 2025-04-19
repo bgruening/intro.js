@@ -612,4 +612,56 @@ describe("Tour", () => {
       expect(mockTour.hasStarted()).toBeFalsy();
     });
   });
+
+  describe("tooltipRenderAsHtml", () => {
+    beforeEach(() => {
+      document.body.innerHTML = ""; // Clear previous test DOM
+    });
+    test("should render HTML when tooltipRenderAsHtml is true", async () => {
+      const tour = new Tour();
+
+      // Arrange & Act
+      tour.setOptions({
+        tooltipRenderAsHtml: true,
+        steps: [
+          {
+            intro: "<b>Bold text</b> and <i>italic text</i>",
+          },
+        ],
+      });
+
+      await tour.start();
+
+      // Assert
+      const tooltip = find(".introjs-tooltiptext");
+      expect(tooltip).not.toBeNull();
+      expect(tooltip?.querySelector("b")?.textContent).toBe("Bold text");
+      expect(tooltip?.querySelector("i")?.textContent).toBe("italic text");
+    });
+
+    test("should not render HTML when tooltipRenderAsHtml is false", async () => {
+      const tour = new Tour();
+
+      // Arrange & Act
+      tour.setOptions({
+        tooltipRenderAsHtml: false,
+        steps: [
+          {
+            intro: "<b>Bold text</b> and <i>italic text</i>",
+          },
+        ],
+      });
+
+      await tour.start();
+
+      // Assert
+      const tooltip = find(".introjs-tooltiptext");
+      expect(tooltip).not.toBeNull();
+      expect(tooltip?.innerHTML).toContain(
+        "&lt;b&gt;Bold text&lt;/b&gt; and &lt;i&gt;italic text&lt;/i&gt;"
+      );
+      expect(tooltip?.querySelector("b")).toBeNull();
+      expect(tooltip?.querySelector("i")).toBeNull();
+    });
+  });
 });

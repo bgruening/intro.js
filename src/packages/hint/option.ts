@@ -28,6 +28,8 @@ export interface HintOptions {
   autoPosition: boolean;
   /* Precedence of positions, when auto is enabled */
   positionPrecedence: TooltipPosition[];
+  /* Optional property to determine if content should be rendered as HTML */
+  tooltipRenderAsHtml?: boolean;
 }
 
 export function getDefaultHintOptions(): HintOptions {
@@ -45,5 +47,6 @@ export function getDefaultHintOptions(): HintOptions {
     helperElementPadding: 10,
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
+    tooltipRenderAsHtml: true,
   };
 }
