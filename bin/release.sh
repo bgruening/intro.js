@@ -31,7 +31,7 @@ if [[ v$VERSION == "$LAST" ]]; then
 fi
 
 # check javascript version
-VERSION=$(node --eval "console.log(require('$DIST_FOLDER/intro.js').version);")
+VERSION=$(node --eval "document = {}; console.log(require('$DIST_FOLDER/intro.js').version);")
 
 if [[ v$VERSION == "$LAST" ]]; then
 	echo "Update version in ./intro.js!"
