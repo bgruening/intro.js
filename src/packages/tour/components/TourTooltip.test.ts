@@ -1,0 +1,35 @@
+import { Header } from "./TourTooltip";
+
+describe("Header", () => {
+  it("renders plain text title when renderAsHtml is false", () => {
+    const el = Header({
+      title: "<strong>Bold Text</strong>",
+      skipLabel: "Skip",
+      renderAsHtml: false,
+      onSkipClick: jest.fn(),
+    });
+
+    const h1 = el.querySelector("h1")!;
+
+    expect(h1.innerHTML).toBe(
+      '<div class="introjs-tooltiptext">&lt;strong&gt;Bold Text&lt;/strong&gt;'
+    );
+    expect(h1.querySelector("strong")).toBeNull();
+  });
+
+  it("renders HTML title when renderAsHtml is true", () => {
+    const el = Header({
+      title: "<strong>Bold Text</strong>",
+      skipLabel: "Skip",
+      renderAsHtml: true,
+      onSkipClick: jest.fn(),
+    });
+
+    const h1 = el.querySelector("h1")!;
+
+    expect(h1.innerHTML).toBe(
+      '<div class="introjs-tooltiptext"><strong>Bold Text</strong>'
+    );
+    expect(h1.querySelector("strong")?.textContent).toBe("Bold Text");
+  });
+});

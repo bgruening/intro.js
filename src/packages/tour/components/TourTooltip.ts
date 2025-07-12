@@ -326,7 +326,7 @@ const Buttons = ({
   );
 };
 
-const Header = ({
+export const Header = ({
   title,
   skipLabel,
   renderAsHtml,
