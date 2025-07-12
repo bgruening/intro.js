@@ -129,4 +129,27 @@ context("Modal", () => {
       });
     });
   });
+
+  it("should apply tooltipClass from step configuration over tour tooltipClass", () => {
+    cy.visit("./cypress/setup/index.html").then((win) => {
+      cy.viewport("macbook-13");
+
+      const instance = win.introJs.tour().setOptions({
+        tooltipClass: "tour-tooltip",
+        steps: [
+          {
+            element: "#main-section",
+            intro: "step tooltip class",
+            tooltipClass: "step-tooltip",
+          },
+        ],
+      });
+      instance.refresh(true);
+      instance.start();
+
+      cy.get(".introjs-tooltip")
+        .should("have.class", "step-tooltip")
+        .should("not.have.class", "tour-tooltip");
+    });
+  });
 });
