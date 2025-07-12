@@ -328,17 +328,22 @@ const Buttons = ({
 
 const Header = ({
   title,
-
   skipLabel,
+  renderAsHtml,
   onSkipClick,
 }: {
   title: string;
-
   skipLabel: string;
+  renderAsHtml?: boolean;
   onSkipClick: (e: any) => void;
 }) => {
+  const titleEl = TooltipContent({
+    text: title,
+    tooltipRenderAsHtml: renderAsHtml,
+    className: tooltipTextClassName,
+  });
   return div({ className: tooltipHeaderClassName }, [
-    h1({ className: tooltipTitleClassName }, title),
+    h1({ className: tooltipTitleClassName }, titleEl),
     Button({
       className: skipButtonClassName,
       label: skipLabel,
@@ -452,7 +457,7 @@ export const TourTooltip = ({
   const text = step.intro;
   const position = step.position;
 
-  children.push(Header({ title, skipLabel, onSkipClick }));
+  children.push(Header({ title, skipLabel, renderAsHtml, onSkipClick }));
 
   children.push(
     TooltipContent({
