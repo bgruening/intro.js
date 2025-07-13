@@ -54,7 +54,7 @@ export const HintTooltip = ({
         TooltipContent({
           text: text || "",
           tooltipRenderAsHtml: renderAsHtml,
-          className: tooltipTextClassName,
+          container: div({ className: tooltipTextClassName }),
         }),
         closeButtonEnabled
           ? a(

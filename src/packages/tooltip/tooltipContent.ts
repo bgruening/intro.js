@@ -1,22 +1,29 @@
 import dom from "../dom";
 
-const { div } = dom.tags;
-
-export type tooltipContentProps = {
+export type TooltipContentProps = {
+  /**
+   * The text content to be displayed in the tooltip.
+   */
   text: string;
-  className: string;
+  /**
+   * The container element where the tooltip content will be rendered.
+   */
+  container: HTMLElement;
+  /**
+   * If true, the text will be rendered as HTML.
+   */
   tooltipRenderAsHtml?: boolean;
 };
 
+/**
+ * TooltipContent component renders the content of a tooltip.
+ * It can render plain text or HTML based on the `tooltipRenderAsHtml` flag.
+ */
 export const TooltipContent = ({
   text,
+  container,
   tooltipRenderAsHtml,
-  className,
-}: tooltipContentProps) => {
-  const container = div({
-    className,
-  });
-
+}: TooltipContentProps) => {
   dom.derive(() => {
     const el = container as HTMLElement;
     if (!el) return;

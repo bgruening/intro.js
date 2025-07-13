@@ -11,9 +11,7 @@ describe("Header", () => {
 
     const h1 = el.querySelector("h1")!;
 
-    expect(h1.innerHTML).toBe(
-      '<div class="introjs-tooltiptext">&lt;strong&gt;Bold Text&lt;/strong&gt;'
-    );
+    expect(h1.innerHTML).toBe("&lt;strong&gt;Bold Text&lt;/strong&gt;");
     expect(h1.querySelector("strong")).toBeNull();
   });
 
@@ -27,9 +25,7 @@ describe("Header", () => {
 
     const h1 = el.querySelector("h1")!;
 
-    expect(h1.innerHTML).toBe(
-      '<div class="introjs-tooltiptext"><strong>Bold Text</strong>'
-    );
+    expect(h1.innerHTML).toBe("<strong>Bold Text</strong>");
     expect(h1.querySelector("strong")?.textContent).toBe("Bold Text");
   });
 });

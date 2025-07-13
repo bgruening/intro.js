@@ -340,10 +340,10 @@ export const Header = ({
   const titleEl = TooltipContent({
     text: title,
     tooltipRenderAsHtml: renderAsHtml,
-    className: tooltipTextClassName,
+    container: h1({ className: tooltipTitleClassName }),
   });
   return div({ className: tooltipHeaderClassName }, [
-    h1({ className: tooltipTitleClassName }, titleEl),
+    titleEl,
     Button({
       className: skipButtonClassName,
       label: skipLabel,
@@ -463,7 +463,7 @@ export const TourTooltip = ({
     TooltipContent({
       text,
       tooltipRenderAsHtml: renderAsHtml,
-      className: tooltipTextClassName,
+      container: div({ className: tooltipTextClassName }),
     })
   );
 
