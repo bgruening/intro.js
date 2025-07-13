@@ -70,7 +70,7 @@
 
     <script type="text/javascript">
       function startIntro(){
-        var intro = introJs();
+        var intro = introJs.tour();
         intro.onbeforechange(function () {
           if (this.currentStep() === 2) {
             alert('You cannot continue! :P')

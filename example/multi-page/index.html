@@ -64,7 +64,7 @@
     <script type="text/javascript" src="../../dist/intro.js"></script>
     <script type="text/javascript">
       document.getElementById('startButton').onclick = function() {
-        introJs().setOption('doneLabel', 'Next page').oncomplete(function() {
+        introJs.tour().setOption('doneLabel', 'Next page').oncomplete(function() {
           window.location.href = 'multi-page/second.html?multipage=true';
         }).start();
       };

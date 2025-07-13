@@ -71,7 +71,7 @@
 
     <script type="text/javascript">
       function startTour() {
-        introJs().start().onbeforeexit(function () {
+        introJs.tour().start().onbeforeexit(function () {
           return confirm("Are you sure?");
         });
       }
