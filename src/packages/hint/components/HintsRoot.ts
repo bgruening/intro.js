@@ -76,6 +76,8 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
       // hints don't have step numbers
       showStepNumbers: false,
 
+      renderAsHtml: hint.getOption("tooltipRenderAsHtml"),
+
       autoPosition: hint.getOption("autoPosition"),
       positionPrecedence: hint.getOption("positionPrecedence"),
 
