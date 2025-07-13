@@ -1,11 +1,14 @@
+import dom from "../dom";
 import { TooltipContent } from "./tooltipContent";
+
+const { div } = dom.tags;
 
 describe("TooltipContent", () => {
   it("renders plain text when tooltipRenderAsHtml is false", () => {
     const el = TooltipContent({
       text: "<strong>Bold Text</strong>",
       tooltipRenderAsHtml: false,
-      className: "tooltip-text",
+      container: div(),
     });
 
     expect(el.innerHTML).toBe("&lt;strong&gt;Bold Text&lt;/strong&gt;");
@@ -16,7 +19,7 @@ describe("TooltipContent", () => {
     const el = TooltipContent({
       text: "<strong>Bold Text</strong>",
       tooltipRenderAsHtml: true,
-      className: "tooltip-text",
+      container: div(),
     });
 
     expect(el.innerHTML).toBe("<strong>Bold Text</strong>");
@@ -26,7 +29,7 @@ describe("TooltipContent", () => {
   it("applies a custom class when provided", () => {
     const el = TooltipContent({
       text: "Custom class test",
-      className: "my-custom-tooltip",
+      container: div({ className: "my-custom-tooltip" }),
     });
 
     expect(el.className).toBe("my-custom-tooltip");
