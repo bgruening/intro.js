@@ -177,6 +177,7 @@ const NextButton = ({
 }) => {
   const isFullButton = currentStep === 0 && steps.length > 1 && hidePrev;
   const isLastStep = currentStep === steps.length - 1 || steps.length === 1;
+  const isHidden = isLastStep && hideNext;
 
   const isDisabled = dom.derive(() => {
     // when the current step is the last one or there is only one step to show
@@ -205,6 +206,9 @@ const NextButton = ({
         classNames.push(fullButtonClassName);
       }
 
+      if (isHidden) {
+        classNames.push(hiddenButtonClassName);
+      }
       return classNames.filter(Boolean).join(" ");
     },
   });
