@@ -6,6 +6,7 @@ import {
   dataHintAttribute,
   dataHintPositionAttribute,
   dataTooltipClassAttribute,
+  dataHintAnimationAttribute,
 } from "./dataAttributes";
 import { State } from "../dom";
 
@@ -69,7 +70,7 @@ export const fetchHintItems = (hint: Hint) => {
     //first add intro items with data-step
     for (const element of elements) {
       // hint animation
-      let hintAnimationAttr = element.getAttribute(dataHintPositionAttribute);
+      let hintAnimationAttr = element.getAttribute(dataHintAnimationAttribute);
 
       let hintAnimation: boolean = hint.getOption("hintAnimation");
       if (hintAnimationAttr) {
