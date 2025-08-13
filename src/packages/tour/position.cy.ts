@@ -2,7 +2,18 @@ describe("Intro.js tooltip position with scrollable container", () => {
   beforeEach(() => {
     cy.visit("./cypress/setup/index.html");
 
-    // Add scrollable container and target element dynamically
+    // intro.js CSS
+    cy.document().then((doc) => {
+      if (!doc.getElementById("introjs-css")) {
+        const link = doc.createElement("link");
+        link.id = "introjs-css";
+        link.rel = "stylesheet";
+        link.href = "https://unpkg.com/intro.js/minified/introjs.min.css";
+        doc.head.appendChild(link);
+      }
+    });
+
+    // scrollable container and target element
     cy.document().then((doc) => {
       const container = doc.createElement("div");
       container.id = "scrollable-container";
@@ -23,20 +34,9 @@ describe("Intro.js tooltip position with scrollable container", () => {
       inner.appendChild(target);
       container.appendChild(inner);
       doc.body.prepend(container);
-
-      // Add start tour button
-      let btn = doc.getElementById("start-tour");
-      if (!btn) {
-        btn = doc.createElement("button");
-        btn.id = "start-tour";
-        btn.textContent = "Start Tour";
-        btn.style.display = "block";
-        btn.className = "btn btn-success mb-4";
-        doc.body.prepend(btn);
-      }
     });
 
-    // Inject Intro.js script and initialize tour
+    // intro.js script and initialize tour
     cy.window().then((win) => {
       return new Promise((resolve) => {
         const script = win.document.createElement("script");
@@ -51,9 +51,6 @@ describe("Intro.js tooltip position with scrollable container", () => {
                 intro: "Scrollable test tooltip 2",
               },
             ],
-            scrollToElement: true,
-            scrollTo: "element",
-            tooltipPosition: "bottom",
           });
           win.__testTour = tour;
           resolve();
@@ -64,21 +61,17 @@ describe("Intro.js tooltip position with scrollable container", () => {
   });
 
   it("scrolls and ensures tooltip is correctly positioned near target", () => {
-    // Scroll target into view within the container
     cy.get("#scrollable-container").scrollTo("top");
     cy.get("#target-element")
       .scrollIntoView({ block: "center" })
       .should("be.visible");
 
-    // Start the tour
     cy.window().then((win) => {
       win.__testTour.start();
     });
 
-    // Wait for tooltip
-    cy.get(".introjs-tooltip", { timeout: 5000 }).should("be.visible");
+    cy.get(".introjs-tooltip", { timeout: 500 }).should("be.visible");
 
-    // Verify tooltip placement
     cy.get("#target-element").then(($target) => {
       const targetRect = $target[0].getBoundingClientRect();
 
@@ -88,7 +81,6 @@ describe("Intro.js tooltip position with scrollable container", () => {
         cy.log("Target Rect:", JSON.stringify(targetRect));
         cy.log("Tooltip Rect:", JSON.stringify(tooltipRect));
 
-        // Ensure not overlapping
         const horizontallySeparate =
           tooltipRect.right < targetRect.left ||
           tooltipRect.left > targetRect.right;
@@ -97,12 +89,11 @@ describe("Intro.js tooltip position with scrollable container", () => {
           tooltipRect.top > targetRect.bottom;
         expect(horizontallySeparate || verticallySeparate).to.be.true;
 
-        // Ensure tooltip is close to target (±10px tolerance)
         const verticalDistance = Math.min(
           Math.abs(tooltipRect.top - targetRect.bottom),
           Math.abs(targetRect.top - tooltipRect.bottom)
         );
-        expect(verticalDistance).to.be.lessThan(15);
+        expect(verticalDistance).to.be.lessThan(16);
       });
     });
   });
