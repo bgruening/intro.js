@@ -1,5 +1,7 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
+import { Translator } from "../../i18n/language";
+const translator = new Translator();
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -80,10 +82,10 @@ export function getDefaultTourOptions(): TourOptions {
   return {
     steps: [],
     isActive: true,
-    nextLabel: "Next",
-    prevLabel: "Back",
+    nextLabel: translator.translate("buttons.next"),
+    prevLabel: translator.translate("buttons.prev"),
     skipLabel: "×",
-    doneLabel: "Done",
+    doneLabel: translator.translate("buttons.done"),
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -108,7 +110,7 @@ export function getDefaultTourOptions(): TourOptions {
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: "Don't show this again",
+    dontShowAgainLabel: translator.translate("alerts.dontShowAgainLabel"),
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
