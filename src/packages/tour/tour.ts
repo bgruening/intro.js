@@ -66,13 +66,15 @@ export class Tour implements Package<TourOptions> {
     this._options = options
       ? setOptions(this._options, options)
       : getDefaultTourOptions();
-      
+
     this._translator = new Translator(this._options.lang);
 
     this._options.nextLabel = this._translator.translate("buttons.next");
     this._options.prevLabel = this._translator.translate("buttons.prev");
     this._options.doneLabel = this._translator.translate("buttons.done");
-    this._options.dontShowAgainLabel = this._translator.translate("alerts.dontShowAgainLabel");
+    this._options.dontShowAgainLabel = this._translator.translate(
+      "alerts.dontShowAgainLabel"
+    );
   }
 
   /**
