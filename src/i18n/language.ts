@@ -1,33 +1,44 @@
-import enUS from './en_US';
+import enUS from "./en_US";
 
 type MessageFormat = (...args: any[]) => string;
 type Message = string | MessageFormat;
 export type Language = { [key: string]: Message | Language };
 
 export class Translator {
-  private readonly _language: Language;
-  private readonly _defaultLanguage: Language;
+  private _language: Language;
 
   constructor(language?: Language) {
-    this._language = language || enUS;
-    this._defaultLanguage = enUS;
+    if (language) {
+      this._language = language;
+    } else {
+      const browserLang = navigator.language.replace("-", "_");
+      try {
+        this._language = require(`./${browserLang}`).default;
+      } catch {
+        this._language = enUS;
+      }
+    }
+  }
+
+  setLanguage(language: Language) {
+    this._language = language;
   }
 
   private getString(message: string, lang: Language): MessageFormat | null {
     if (!lang || !message) return null;
 
-    const splitted = message.split('.');
+    const splitted = message.split(".");
     const key = splitted[0];
 
     if (lang[key]) {
       const val = lang[key];
 
-      if (typeof val === 'string') {
+      if (typeof val === "string") {
         return (): string => val;
-      } else if (typeof val === 'function') {
+      } else if (typeof val === "function") {
         return val;
       } else {
-        return this.getString(splitted.slice(1).join('.'), val);
+        return this.getString(splitted.slice(1).join("."), val);
       }
     }
 
@@ -36,14 +47,6 @@ export class Translator {
 
   translate(message: string, ...args: any[]): string {
     const translated = this.getString(message, this._language);
-    let messageFormat;
-
-    if (translated) {
-      messageFormat = translated;
-    } else {
-      messageFormat = this.getString(message, this._defaultLanguage);
-    }
-
-    return messageFormat ? messageFormat(...args) : message;
+    return translated ? translated(...args) : message;
   }
 }

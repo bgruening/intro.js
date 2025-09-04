@@ -1,7 +1,6 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
-import { Translator } from "../../i18n/language";
-const translator = new Translator();
+import { Language } from "../../i18n/language";
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -76,16 +75,19 @@ export interface TourOptions {
   progressBarAdditionalClass: string;
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
+  /* Optional property to set the language of the tour.
+   Defaults to the user's browser language if not provided. */
+  lang?: Language;
 }
 
 export function getDefaultTourOptions(): TourOptions {
   return {
     steps: [],
     isActive: true,
-    nextLabel: translator.translate("buttons.next"),
-    prevLabel: translator.translate("buttons.prev"),
+    nextLabel: "Next",
+    prevLabel: "Prev",
     skipLabel: "×",
-    doneLabel: translator.translate("buttons.done"),
+    doneLabel: "Done",
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -110,7 +112,7 @@ export function getDefaultTourOptions(): TourOptions {
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: translator.translate("alerts.dontShowAgainLabel"),
+    dontShowAgainLabel: "Don't show this again",
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
