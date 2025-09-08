@@ -77,12 +77,12 @@ export const fetchHintItems = (hint: Hint) => {
         hintAnimation = hintAnimationAttr === "true";
       }
 
-      const text = element.getAttribute(dataHintAttribute);
-      if (!text) return;
+      const hintText = element.getAttribute(dataHintAttribute);
+      if (!hintText) return;
 
       hint.addHint({
         element: element,
-        hint: text,
+        hint: hintText,
         hintPosition: (element.getAttribute(dataHintPositionAttribute) ||
           hint.getOption("hintPosition")) as HintPosition,
         hintAnimation,
