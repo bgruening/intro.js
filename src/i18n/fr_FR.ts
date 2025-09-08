@@ -5,7 +5,8 @@ export default {
     skip: "Passer",
     done: "Terminé",
   },
-  alerts: {
-    dontShowAgainLabel: "Ne plus afficher",
+  messages: {
+    dontShowAgainLabel: "Ne plus afficher ceci",
+    stepNumbersOfLabel: "sur",
   },
 };

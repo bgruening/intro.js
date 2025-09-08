@@ -5,7 +5,8 @@ export default {
     skip: "Saltar",
     done: "Hecho",
   },
-  alerts: {
-    dontShowAgainLabel: "No mostrar de nuevo",
+  messages: {
+    dontShowAgainLabel: "No mostrar esto de nuevo",
+    stepNumbersOfLabel: "de",
   },
 };

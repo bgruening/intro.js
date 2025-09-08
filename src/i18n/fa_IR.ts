@@ -5,7 +5,8 @@ export default {
     skip: "رد کردن",
     done: "پایان",
   },
-  alerts: {
-    dontShowAgainLabel: "دیگه نشون نده",
+  messages: {
+    dontShowAgainLabel: "دیگر این را نشان نده",
+    stepNumbersOfLabel: "از",
   },
 };

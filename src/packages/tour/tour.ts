@@ -22,7 +22,6 @@ import onKeyDown from "./onKeyDown";
 import dom from "../dom";
 import { TourRoot } from "./components/TourRoot";
 import { FloatingElement } from "./components/FloatingElement";
-import { Translator } from "../../i18n/language";
 
 /**
  * Intro.js Tour class
@@ -36,7 +35,6 @@ export class Tour implements Package<TourOptions> {
   private readonly _targetElement: HTMLElement;
   private _options: TourOptions;
   private _floatingElement: Element | undefined;
-  private _translator: Translator;
 
   private readonly callbacks: {
     beforeChange?: introBeforeChangeCallback;
@@ -66,15 +64,6 @@ export class Tour implements Package<TourOptions> {
     this._options = options
       ? setOptions(this._options, options)
       : getDefaultTourOptions();
-
-    this._translator = new Translator(this._options.lang);
-
-    this._options.nextLabel = this._translator.translate("buttons.next");
-    this._options.prevLabel = this._translator.translate("buttons.prev");
-    this._options.doneLabel = this._translator.translate("buttons.done");
-    this._options.dontShowAgainLabel = this._translator.translate(
-      "alerts.dontShowAgainLabel"
-    );
   }
 
   /**
