@@ -23,12 +23,14 @@ export class Translator {
     if (language) {
       this._language = language;
     } else {
-      const rawLang =
-        (navigator.language || (navigator as any).userLanguage || "en-US")
-          .replace("-", "_");
+      const rawLang = (
+        navigator.language ||
+        (navigator as any).userLanguage ||
+        "en-US"
+      ).replace("-", "_");
 
       const normalizedLang = Object.keys(languages).find(
-        key => key.toLowerCase() === rawLang.toLowerCase()
+        (key) => key.toLowerCase() === rawLang.toLowerCase()
       );
 
       this._language = normalizedLang ? languages[normalizedLang] : enUS;
@@ -39,7 +41,10 @@ export class Translator {
     this._language = language;
   }
 
-  private getString(message: string, lang: Language = this._language): MessageFormat | null {
+  private getString(
+    message: string,
+    lang: Language = this._language
+  ): MessageFormat | null {
     if (!lang || !message) return null;
 
     const splitted = message.split(".");

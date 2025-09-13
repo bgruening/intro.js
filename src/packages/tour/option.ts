@@ -1,7 +1,7 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
 import { Translator, Language } from "../../i18n/language";
-import enUS from "../../i18n/en_US"; 
+import enUS from "../../i18n/en_US";
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
