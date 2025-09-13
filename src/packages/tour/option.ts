@@ -1,5 +1,7 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
+import { Translator, Language } from "../../i18n/language";
+import enUS from "../../i18n/en_US"; 
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -74,16 +76,20 @@ export interface TourOptions {
   progressBarAdditionalClass: string;
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
+  /* Optional property to set the language of the tour.
+   Defaults to the user's browser language if not provided. */
+  language?: Language;
 }
 
-export function getDefaultTourOptions(): TourOptions {
+export function getDefaultTourOptions(language: Language = enUS): TourOptions {
+  const translator = new Translator(language);
   return {
     steps: [],
     isActive: true,
-    nextLabel: "Next",
-    prevLabel: "Back",
+    nextLabel: translator.translate("buttons.next"),
+    prevLabel: translator.translate("buttons.prev"),
     skipLabel: "×",
-    doneLabel: "Done",
+    doneLabel: translator.translate("buttons.done"),
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -94,7 +100,7 @@ export function getDefaultTourOptions(): TourOptions {
     exitOnEsc: true,
     exitOnOverlayClick: true,
     showStepNumbers: false,
-    stepNumbersOfLabel: "of",
+    stepNumbersOfLabel: translator.translate("messages.stepNumbersOfLabel"),
     keyboardNavigation: true,
     showButtons: true,
     showBullets: true,
@@ -108,7 +114,7 @@ export function getDefaultTourOptions(): TourOptions {
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: "Don't show this again",
+    dontShowAgainLabel: translator.translate("messages.dontShowAgain"),
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
@@ -116,5 +122,6 @@ export function getDefaultTourOptions(): TourOptions {
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
+    language,
   };
 }
