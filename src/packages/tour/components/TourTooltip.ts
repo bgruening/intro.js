@@ -350,7 +350,7 @@ export const Header = ({
       className: tooltipTitleClassName,
       role: "heading",
       "aria-level": 1,
-      "aria-label": title || text,
+      "aria-label": title,
     }),
   });
   return div({ className: tooltipHeaderClassName }, [
