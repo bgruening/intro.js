@@ -25,7 +25,7 @@ export type HintItem = {
   element?: HTMLElement | string | null;
   tooltipClass?: string;
   position: TooltipPosition;
-  hint?: string;
+  hint: string;
   // this is the HintIcon element for this particular hint
   // used for positioning the HintTooltip
   hintTooltipElement?: HTMLElement;
@@ -77,9 +77,12 @@ export const fetchHintItems = (hint: Hint) => {
         hintAnimation = hintAnimationAttr === "true";
       }
 
+      const hintText = element.getAttribute(dataHintAttribute);
+      if (!hintText) return;
+
       hint.addHint({
         element: element,
-        hint: element.getAttribute(dataHintAttribute) || "",
+        hint: hintText,
         hintPosition: (element.getAttribute(dataHintPositionAttribute) ||
           hint.getOption("hintPosition")) as HintPosition,
         hintAnimation,
