@@ -7,6 +7,7 @@ import frFR from "./fr_FR";
 type MessageFormat = (...args: any[]) => string;
 type Message = string | MessageFormat;
 export type Language = { [key: string]: Message | Language };
+export type LanguageCode = "en_US" | "es_ES" | "fr_FR" | "de_DE" | "fa_IR";
 
 const languages: Record<string, Language> = {
   en_US: enUS,
@@ -15,6 +16,20 @@ const languages: Record<string, Language> = {
   es_ES: esES,
   fr_FR: frFR,
 };
+
+/**
+ * Get language object by language code
+ */
+export function getLanguageByCode(languageCode: LanguageCode): Language {
+  return languages[languageCode] || enUS;
+}
+
+/**
+ * Get all available language codes
+ */
+export function getAvailableLanguages(): LanguageCode[] {
+  return Object.keys(languages) as LanguageCode[];
+}
 
 export class Translator {
   private _language: Language;

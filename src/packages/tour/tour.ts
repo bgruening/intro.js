@@ -12,6 +12,11 @@ import {
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
+import {
+  LanguageCode,
+  getLanguageByCode,
+  Translator,
+} from "../../i18n/language";
 import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
@@ -61,9 +66,15 @@ export class Tour implements Package<TourOptions> {
     options?: Partial<TourOptions>
   ) {
     this._targetElement = getContainerElement(elementOrSelector);
-    this._options = options
-      ? setOptions(this._options, options)
-      : getDefaultTourOptions();
+
+    if (options) {
+      // Initialize with default options first
+      this._options = getDefaultTourOptions();
+      // Then apply the provided options using our enhanced setOptions method
+      this.setOptions(options);
+    } else {
+      this._options = getDefaultTourOptions();
+    }
   }
 
   /**
@@ -293,7 +304,46 @@ export class Tour implements Package<TourOptions> {
    * @param partialOptions key/value pair of options
    */
   setOptions(partialOptions: Partial<TourOptions>): this {
-    this._options = setOptions(this._options, partialOptions);
+    // Handle language code conversion and update button labels
+    const processedOptions = { ...partialOptions };
+
+    if (processedOptions.language) {
+      let languageObj;
+      if (typeof processedOptions.language === "string") {
+        languageObj = getLanguageByCode(
+          processedOptions.language as LanguageCode
+        );
+        processedOptions.language = languageObj;
+      } else {
+        languageObj = processedOptions.language;
+      }
+
+      // Update button labels based on the new language
+      const translator = new Translator(languageObj);
+
+      // Only update labels if they weren't explicitly provided in the options
+      if (!partialOptions.nextLabel) {
+        processedOptions.nextLabel = translator.translate("buttons.next");
+      }
+      if (!partialOptions.prevLabel) {
+        processedOptions.prevLabel = translator.translate("buttons.prev");
+      }
+      if (!partialOptions.doneLabel) {
+        processedOptions.doneLabel = translator.translate("buttons.done");
+      }
+      if (!partialOptions.stepNumbersOfLabel) {
+        processedOptions.stepNumbersOfLabel = translator.translate(
+          "messages.stepNumbersOfLabel"
+        );
+      }
+      if (!partialOptions.dontShowAgainLabel) {
+        processedOptions.dontShowAgainLabel = translator.translate(
+          "messages.dontShowAgainLabel"
+        );
+      }
+    }
+
+    this._options = setOptions(this._options, processedOptions);
     return this;
   }
 

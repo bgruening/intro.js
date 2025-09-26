@@ -1,6 +1,11 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
-import { Translator, Language } from "../../i18n/language";
+import {
+  Translator,
+  Language,
+  LanguageCode,
+  getLanguageByCode,
+} from "../../i18n/language";
 import enUS from "../../i18n/en_US";
 
 export interface TourOptions {
@@ -77,12 +82,19 @@ export interface TourOptions {
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
   /* Optional property to set the language of the tour.
+   Can be a Language object for custom languages or a language code string for built-in languages.
+   Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
-  language?: Language;
+  language?: Language | LanguageCode;
 }
 
-export function getDefaultTourOptions(language: Language = enUS): TourOptions {
-  const translator = new Translator(language);
+export function getDefaultTourOptions(
+  language: Language | LanguageCode = enUS
+): TourOptions {
+  // Convert language code to Language object if needed
+  const languageObj =
+    typeof language === "string" ? getLanguageByCode(language) : language;
+  const translator = new Translator(languageObj);
   return {
     steps: [],
     isActive: true,
@@ -122,6 +134,6 @@ export function getDefaultTourOptions(language: Language = enUS): TourOptions {
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
-    language,
+    language: languageObj,
   };
 }
