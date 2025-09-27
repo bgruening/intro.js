@@ -12,6 +12,11 @@ import {
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
+import {
+  LanguageCode,
+  getLanguageByCode,
+  Translator,
+} from "../../i18n/language";
 import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
@@ -299,33 +304,46 @@ export class Tour implements Package<TourOptions> {
    * @param partialOptions key/value pair of options
    */
   setOptions(partialOptions: Partial<TourOptions>): this {
-    if (partialOptions.language) {
-      // Use getDefaultTourOptions to get properly translated labels
-      const tempOptions = getDefaultTourOptions(partialOptions.language);
+    // Handle language code conversion and update button labels
+    const processedOptions = { ...partialOptions };
 
-      // Only override labels that weren't explicitly provided
-      const languageUpdates: Partial<TourOptions> = {
-        language: tempOptions.language,
-      };
+    if (processedOptions.language) {
+      let languageObj;
+      if (typeof processedOptions.language === "string") {
+        languageObj = getLanguageByCode(
+          processedOptions.language as LanguageCode
+        );
+        processedOptions.language = languageObj;
+      } else {
+        languageObj = processedOptions.language;
+      }
 
-      if (!partialOptions.nextLabel)
-        languageUpdates.nextLabel = tempOptions.nextLabel;
-      if (!partialOptions.prevLabel)
-        languageUpdates.prevLabel = tempOptions.prevLabel;
-      if (!partialOptions.doneLabel)
-        languageUpdates.doneLabel = tempOptions.doneLabel;
-      if (!partialOptions.stepNumbersOfLabel)
-        languageUpdates.stepNumbersOfLabel = tempOptions.stepNumbersOfLabel;
-      if (!partialOptions.dontShowAgainLabel)
-        languageUpdates.dontShowAgainLabel = tempOptions.dontShowAgainLabel;
+      // Update button labels based on the new language
+      const translator = new Translator(languageObj);
 
-      this._options = setOptions(this._options, {
-        ...partialOptions,
-        ...languageUpdates,
-      });
-    } else {
-      this._options = setOptions(this._options, partialOptions);
+      // Only update labels if they weren't explicitly provided in the options
+      if (!partialOptions.nextLabel) {
+        processedOptions.nextLabel = translator.translate("buttons.next");
+      }
+      if (!partialOptions.prevLabel) {
+        processedOptions.prevLabel = translator.translate("buttons.prev");
+      }
+      if (!partialOptions.doneLabel) {
+        processedOptions.doneLabel = translator.translate("buttons.done");
+      }
+      if (!partialOptions.stepNumbersOfLabel) {
+        processedOptions.stepNumbersOfLabel = translator.translate(
+          "messages.stepNumbersOfLabel"
+        );
+      }
+      if (!partialOptions.dontShowAgainLabel) {
+        processedOptions.dontShowAgainLabel = translator.translate(
+          "messages.dontShowAgainLabel"
+        );
+      }
     }
+
+    this._options = setOptions(this._options, processedOptions);
     return this;
   }
 
