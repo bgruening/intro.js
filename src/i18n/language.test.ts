@@ -1,4 +1,9 @@
-import { Translator, getLanguageByCode, getAvailableLanguages, LanguageCode } from "./language";
+import {
+  Translator,
+  getLanguageByCode,
+  getAvailableLanguages,
+  LanguageCode,
+} from "./language";
 import enUS from "./en_US";
 import esES from "./es_ES";
 import frFR from "./fr_FR";
@@ -351,7 +356,7 @@ describe("Translator", () => {
 
       it("should return array of strings", () => {
         const availableLanguages = getAvailableLanguages();
-        availableLanguages.forEach(code => {
+        availableLanguages.forEach((code) => {
           expect(typeof code).toBe("string");
         });
       });
@@ -386,23 +391,25 @@ describe("Translator", () => {
       // Mock Tour class for testing
       class MockTour {
         private _options: any = {};
-        
+
         setOptions(options: any) {
           // Simulate the Tour class setOptions logic
           const processedOptions = { ...options };
-          
+
           if (processedOptions.language) {
             let languageObj;
-            if (typeof processedOptions.language === 'string') {
-              languageObj = getLanguageByCode(processedOptions.language as LanguageCode);
+            if (typeof processedOptions.language === "string") {
+              languageObj = getLanguageByCode(
+                processedOptions.language as LanguageCode
+              );
               processedOptions.language = languageObj;
             } else {
               languageObj = processedOptions.language;
             }
-            
+
             // Update button labels based on the new language
             const translator = new Translator(languageObj);
-            
+
             if (!options.nextLabel) {
               processedOptions.nextLabel = translator.translate("buttons.next");
             }
@@ -413,11 +420,11 @@ describe("Translator", () => {
               processedOptions.doneLabel = translator.translate("buttons.done");
             }
           }
-          
+
           this._options = { ...this._options, ...processedOptions };
           return this;
         }
-        
+
         getOption(key: string) {
           return this._options[key];
         }
@@ -425,9 +432,9 @@ describe("Translator", () => {
 
       it("should work with string language codes in setOptions", () => {
         const tour = new MockTour();
-        
+
         tour.setOptions({ language: "es_ES" });
-        
+
         expect(tour.getOption("nextLabel")).toBe("Siguiente");
         expect(tour.getOption("prevLabel")).toBe("Atrás");
         expect(tour.getOption("doneLabel")).toBe("Hecho");
@@ -435,19 +442,19 @@ describe("Translator", () => {
 
       it("should work with different language codes", () => {
         const tour = new MockTour();
-        
+
         // Test German
         tour.setOptions({ language: "de_DE" });
         expect(tour.getOption("nextLabel")).toBe("Weiter");
         expect(tour.getOption("prevLabel")).toBe("Zurück");
         expect(tour.getOption("doneLabel")).toBe("Fertig");
-        
+
         // Test French
         tour.setOptions({ language: "fr_FR" });
         expect(tour.getOption("nextLabel")).toBe("Suivant");
         expect(tour.getOption("prevLabel")).toBe("Retour");
         expect(tour.getOption("doneLabel")).toBe("Terminé");
-        
+
         // Test Persian
         tour.setOptions({ language: "fa_IR" });
         expect(tour.getOption("nextLabel")).toBe("بعدی");
@@ -457,13 +464,13 @@ describe("Translator", () => {
 
       it("should not override explicitly provided button labels", () => {
         const tour = new MockTour();
-        
-        tour.setOptions({ 
+
+        tour.setOptions({
           language: "es_ES",
           nextLabel: "Custom Next",
-          prevLabel: "Custom Prev"
+          prevLabel: "Custom Prev",
         });
-        
+
         // Custom labels should be preserved
         expect(tour.getOption("nextLabel")).toBe("Custom Next");
         expect(tour.getOption("prevLabel")).toBe("Custom Prev");

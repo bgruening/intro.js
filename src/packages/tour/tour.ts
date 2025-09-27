@@ -304,46 +304,15 @@ export class Tour implements Package<TourOptions> {
    * @param partialOptions key/value pair of options
    */
   setOptions(partialOptions: Partial<TourOptions>): this {
-    // Handle language code conversion and update button labels
-    const processedOptions = { ...partialOptions };
-
-    if (processedOptions.language) {
-      let languageObj;
-      if (typeof processedOptions.language === "string") {
-        languageObj = getLanguageByCode(
-          processedOptions.language as LanguageCode
-        );
-        processedOptions.language = languageObj;
-      } else {
-        languageObj = processedOptions.language;
-      }
-
-      // Update button labels based on the new language
-      const translator = new Translator(languageObj);
-
-      // Only update labels if they weren't explicitly provided in the options
-      if (!partialOptions.nextLabel) {
-        processedOptions.nextLabel = translator.translate("buttons.next");
-      }
-      if (!partialOptions.prevLabel) {
-        processedOptions.prevLabel = translator.translate("buttons.prev");
-      }
-      if (!partialOptions.doneLabel) {
-        processedOptions.doneLabel = translator.translate("buttons.done");
-      }
-      if (!partialOptions.stepNumbersOfLabel) {
-        processedOptions.stepNumbersOfLabel = translator.translate(
-          "messages.stepNumbersOfLabel"
-        );
-      }
-      if (!partialOptions.dontShowAgainLabel) {
-        processedOptions.dontShowAgainLabel = translator.translate(
-          "messages.dontShowAgainLabel"
-        );
-      }
+    if (partialOptions.language) {
+      const tempOptions = getDefaultTourOptions(partialOptions.language);
+      this._options = setOptions(this._options, {
+        ...tempOptions,
+        ...partialOptions,
+      });
+    } else {
+      this._options = setOptions(this._options, partialOptions);
     }
-
-    this._options = setOptions(this._options, processedOptions);
     return this;
   }
 
