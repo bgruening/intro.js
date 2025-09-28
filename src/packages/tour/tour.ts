@@ -12,11 +12,6 @@ import {
 } from "./callback";
 import { getDefaultTourOptions, TourOptions } from "./option";
 import { setOptions, setOption } from "../../option";
-import {
-  LanguageCode,
-  getLanguageByCode,
-  Translator,
-} from "../../i18n/language";
 import { start } from "./start";
 import exitIntro from "./exitIntro";
 import isFunction from "../../util/isFunction";
@@ -66,15 +61,9 @@ export class Tour implements Package<TourOptions> {
     options?: Partial<TourOptions>
   ) {
     this._targetElement = getContainerElement(elementOrSelector);
-
-    if (options) {
-      // Initialize with default options first
-      this._options = getDefaultTourOptions();
-      // Then apply the provided options using our enhanced setOptions method
-      this.setOptions(options);
-    } else {
-      this._options = getDefaultTourOptions();
-    }
+    this._options = options
+      ? setOptions(this._options, options)
+      : getDefaultTourOptions();
   }
 
   /**
@@ -304,15 +293,7 @@ export class Tour implements Package<TourOptions> {
    * @param partialOptions key/value pair of options
    */
   setOptions(partialOptions: Partial<TourOptions>): this {
-    if (partialOptions.language) {
-      const tempOptions = getDefaultTourOptions(partialOptions.language);
-      this._options = setOptions(this._options, {
-        ...tempOptions,
-        ...partialOptions,
-      });
-    } else {
-      this._options = setOptions(this._options, partialOptions);
-    }
+    this._options = setOptions(this._options, partialOptions);
     return this;
   }
 

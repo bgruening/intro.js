@@ -1,21 +1,21 @@
 import enUS from "./en_US";
 import faIR from "./fa_IR";
-import de_DE from "./de_DE";
+import deDE from "./de_DE";
 import esES from "./es_ES";
 import frFR from "./fr_FR";
 
 type MessageFormat = (...args: any[]) => string;
 type Message = string | MessageFormat;
 export type Language = { [key: string]: Message | Language };
-export type LanguageCode = "en_US" | "es_ES" | "fr_FR" | "de_DE" | "fa_IR";
-
-const languages: Record<string, Language> = {
+const languages = {
   en_US: enUS,
   fa_IR: faIR,
-  de_DE: de_DE,
+  de_DE: deDE,
   es_ES: esES,
   fr_FR: frFR,
-};
+} as const;
+
+export type LanguageCode = keyof typeof languages;
 
 /**
  * Get language object by language code
@@ -44,11 +44,11 @@ export class Translator {
         "en-US"
       ).replace("-", "_");
 
-      const normalizedLang = Object.keys(languages).find(
+      const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
         (key) => key.toLowerCase() === rawLang.toLowerCase()
       );
 
-      this._language = normalizedLang ? languages[normalizedLang] : enUS;
+      this._language = normalizedLang ? languages[normalizedLang as LanguageCode] : enUS;
     }
   }
 
