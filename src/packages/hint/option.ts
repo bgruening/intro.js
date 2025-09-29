@@ -58,7 +58,7 @@ export function getDefaultHintOptions(
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: translator.translate("buttons.done"), // Use "Done" for hints
+    hintButtonLabel: translator.translate("buttons.done"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,

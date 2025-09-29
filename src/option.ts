@@ -1,15 +1,67 @@
+import { getDefaultTourOptions, TourOptions } from "./packages/tour/option";
+import { getDefaultHintOptions, HintOptions } from "./packages/hint/option";
+
+/**
+ * @param options The options object to modify
+ * @param key The key to set
+ * @param value The value to set
+ * @returns The modified options object
+ */
 export function setOption<T, K extends keyof T>(
   options: T,
   key: K,
   value: T[K]
 ): T {
-  options[key] = value;
-  return options;
+  const result = { ...options };
+  result[key] = value;
+  return result;
 }
 
+export function setOptions(
+  options: TourOptions,
+  partialOptions: Partial<TourOptions>
+): TourOptions;
+
+export function setOptions(
+  options: HintOptions,
+  partialOptions: Partial<HintOptions>
+): HintOptions;
+
+export function setOptions<T>(options: T, partialOptions: Partial<T>): T;
+
+/**
+ * @param options The current options object
+ * @param partialOptions The partial options to merge
+ * @returns A new options object with merged values
+ */
 export function setOptions<T>(options: T, partialOptions: Partial<T>): T {
-  for (const [key, value] of Object.entries(partialOptions)) {
-    options = setOption(options, key as keyof T, value as T[keyof T]);
+  if (!options || !partialOptions) {
+    return options;
   }
-  return options;
+
+  // Check if language processing is needed
+  const partial = partialOptions as any;
+  if (!partial.language) {
+    return { ...options, ...partialOptions };
+  }
+
+  try {
+    const tourDefaults = getDefaultTourOptions(partial.language);
+    return {
+      ...options,
+      ...tourDefaults,
+      ...partialOptions,
+    } as T;
+  } catch {
+    try {
+      const hintDefaults = getDefaultHintOptions(partial.language);
+      return {
+        ...options,
+        ...hintDefaults,
+        ...partialOptions,
+      } as T;
+    } catch {
+      return { ...options, ...partialOptions };
+    }
+  }
 }

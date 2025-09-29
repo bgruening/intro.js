@@ -48,7 +48,9 @@ export class Translator {
         (key) => key.toLowerCase() === rawLang.toLowerCase()
       );
 
-      this._language = normalizedLang ? languages[normalizedLang as LanguageCode] : enUS;
+      this._language = normalizedLang
+        ? languages[normalizedLang as LanguageCode]
+        : enUS;
     }
   }
 
