@@ -134,6 +134,6 @@ export function getDefaultTourOptions(
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
-    language: languageObj,
+    language,
   };
 }

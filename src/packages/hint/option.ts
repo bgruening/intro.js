@@ -67,6 +67,6 @@ export function getDefaultHintOptions(
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
-    language: languageObj,
+    language,
   };
 }

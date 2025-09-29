@@ -27,8 +27,6 @@ export function setOptions(
   partialOptions: Partial<HintOptions>
 ): HintOptions;
 
-export function setOptions<T>(options: T, partialOptions: Partial<T>): T;
-
 /**
  * @param options The current options object
  * @param partialOptions The partial options to merge
@@ -39,29 +37,24 @@ export function setOptions<T>(options: T, partialOptions: Partial<T>): T {
     return options;
   }
 
-  // Check if language processing is needed
   const partial = partialOptions as any;
   if (!partial.language) {
     return { ...options, ...partialOptions };
   }
 
-  try {
-    const tourDefaults = getDefaultTourOptions(partial.language);
+  const tourDefaults = getDefaultTourOptions(partial.language);
+  if (tourDefaults) {
     return {
       ...options,
       ...tourDefaults,
       ...partialOptions,
     } as T;
-  } catch {
-    try {
-      const hintDefaults = getDefaultHintOptions(partial.language);
-      return {
-        ...options,
-        ...hintDefaults,
-        ...partialOptions,
-      } as T;
-    } catch {
-      return { ...options, ...partialOptions };
-    }
   }
+
+  const hintDefaults = getDefaultHintOptions(partial.language);
+  return {
+    ...options,
+    ...hintDefaults,
+    ...partialOptions,
+  } as T;
 }
