@@ -1,17 +1,27 @@
 import { getDefaultTourOptions, TourOptions } from "./packages/tour/option";
 import { getDefaultHintOptions, HintOptions } from "./packages/hint/option";
 
-/**
- * @param options The options object to modify
- * @param key The key to set
- * @param value The value to set
- * @returns The modified options object
- */
+function applyLanguageDefaults<T>(options: T, language: any): T {
+  const optionsObj = options as any;
+  
+  if (optionsObj.hintButtonLabel !== undefined || optionsObj.hints !== undefined) {
+    const defaults = getDefaultHintOptions(language);
+    return { ...options, ...defaults, language } as T;
+  }
+  
+  const defaults = getDefaultTourOptions(language);
+  return { ...options, ...defaults, language } as T;
+}
+
 export function setOption<T, K extends keyof T>(
   options: T,
   key: K,
   value: T[K]
 ): T {
+  if (key === 'language') {
+    return applyLanguageDefaults(options, value);
+  }
+  
   const result = { ...options };
   result[key] = value;
   return result;
@@ -27,34 +37,28 @@ export function setOptions(
   partialOptions: Partial<HintOptions>
 ): HintOptions;
 
-/**
- * @param options The current options object
- * @param partialOptions The partial options to merge
- * @returns A new options object with merged values
- */
+export function setOptions<T>(options: T, partialOptions: Partial<T>): T;
+
 export function setOptions<T>(options: T, partialOptions: Partial<T>): T {
-  if (!options || !partialOptions) {
+  const partial = partialOptions as any;
+  
+  if (partial.language) {
+    options = applyLanguageDefaults(options, partial.language);
+    
+    for (const [key, value] of Object.entries(partialOptions)) {
+      if (key !== 'language') {
+        const result = { ...options };
+        result[key as keyof T] = value as T[keyof T];
+        options = result;
+      }
+    }
+    
     return options;
   }
-
-  const partial = partialOptions as any;
-  if (!partial.language) {
-    return { ...options, ...partialOptions };
+  
+  for (const [key, value] of Object.entries(partialOptions)) {
+    options = setOption(options, key as keyof T, value as T[keyof T]);
   }
-
-  const tourDefaults = getDefaultTourOptions(partial.language);
-  if (tourDefaults) {
-    return {
-      ...options,
-      ...tourDefaults,
-      ...partialOptions,
-    } as T;
-  }
-
-  const hintDefaults = getDefaultHintOptions(partial.language);
-  return {
-    ...options,
-    ...hintDefaults,
-    ...partialOptions,
-  } as T;
+  
+  return options;
 }
