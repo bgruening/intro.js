@@ -1,5 +1,5 @@
-import { getDefaultTourOptions, TourOptions } from "./packages/tour/option";
-import { getDefaultHintOptions, HintOptions } from "./packages/hint/option";
+import { getDefaultTourOptions } from "./packages/tour/option";
+import { getDefaultHintOptions } from "./packages/hint/option";
 
 function applyLanguageDefaults<T>(options: T, language: any): T {
   const optionsObj = options as any;
@@ -27,35 +27,7 @@ export function setOption<T, K extends keyof T>(
   return result;
 }
 
-export function setOptions(
-  options: TourOptions,
-  partialOptions: Partial<TourOptions>
-): TourOptions;
-
-export function setOptions(
-  options: HintOptions,
-  partialOptions: Partial<HintOptions>
-): HintOptions;
-
-export function setOptions<T>(options: T, partialOptions: Partial<T>): T;
-
-export function setOptions<T>(options: T, partialOptions: Partial<T>): T {
-  const partial = partialOptions as any;
-  
-  if (partial.language) {
-    options = applyLanguageDefaults(options, partial.language);
-    
-    for (const [key, value] of Object.entries(partialOptions)) {
-      if (key !== 'language') {
-        const result = { ...options };
-        result[key as keyof T] = value as T[keyof T];
-        options = result;
-      }
-    }
-    
-    return options;
-  }
-  
+export function setOptions<T>(options: T, partialOptions: Partial<T>): T {  
   for (const [key, value] of Object.entries(partialOptions)) {
     options = setOption(options, key as keyof T, value as T[keyof T]);
   }
