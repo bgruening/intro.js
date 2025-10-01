@@ -58,6 +58,10 @@ export class Translator {
     this._language = language;
   }
 
+  getLanguage(): Language {
+    return this._language;
+  }
+
   private getString(
     message: string,
     lang: Language = this._language

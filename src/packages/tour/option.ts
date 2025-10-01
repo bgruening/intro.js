@@ -86,22 +86,27 @@ export interface TourOptions {
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
   language?: Language | LanguageCode;
+  /** Injected translator instance */
+  translator: Translator;
 }
 
 export function getDefaultTourOptions(
+  translator?: Translator,
   language: Language | LanguageCode = enUS
 ): TourOptions {
-  // Convert language code to Language object if needed
   const languageObj =
     typeof language === "string" ? getLanguageByCode(language) : language;
-  const translator = new Translator(languageObj);
+
+  const t = translator ?? new Translator(languageObj);
+  t.setLanguage(languageObj);
+
   return {
     steps: [],
     isActive: true,
-    nextLabel: translator.translate("buttons.next"),
-    prevLabel: translator.translate("buttons.prev"),
+    nextLabel: t.translate("buttons.next"),
+    prevLabel: t.translate("buttons.prev"),
     skipLabel: "×",
-    doneLabel: translator.translate("buttons.done"),
+    doneLabel: t.translate("buttons.done"),
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -112,7 +117,7 @@ export function getDefaultTourOptions(
     exitOnEsc: true,
     exitOnOverlayClick: true,
     showStepNumbers: false,
-    stepNumbersOfLabel: translator.translate("messages.stepNumbersOfLabel"),
+    stepNumbersOfLabel: t.translate("messages.stepNumbersOfLabel"),
     keyboardNavigation: true,
     showButtons: true,
     showBullets: true,
@@ -126,7 +131,7 @@ export function getDefaultTourOptions(
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: translator.translate("messages.dontShowAgain"),
+    dontShowAgainLabel: t.translate("messages.dontShowAgain"),
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
@@ -135,5 +140,6 @@ export function getDefaultTourOptions(
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
     language,
+    translator: t,
   };
 }

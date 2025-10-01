@@ -42,15 +42,19 @@ export interface HintOptions {
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
   language?: Language | LanguageCode;
+  /** Injected translator instance */
+  translator: Translator;
 }
 
 export function getDefaultHintOptions(
+  translator?: Translator,
   language: Language | LanguageCode = enUS
 ): HintOptions {
-  // Convert language code to Language object if needed
   const languageObj =
     typeof language === "string" ? getLanguageByCode(language) : language;
-  const translator = new Translator(languageObj);
+
+  const t = translator ?? new Translator(languageObj);
+  t.setLanguage(languageObj);
 
   return {
     hints: [],
@@ -58,7 +62,7 @@ export function getDefaultHintOptions(
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: translator.translate("buttons.done"),
+    hintButtonLabel: t.translate("buttons.done"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,
@@ -68,5 +72,6 @@ export function getDefaultHintOptions(
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
     language,
+    translator: t,
   };
 }
