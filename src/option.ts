@@ -7,6 +7,10 @@ import {
   getLanguageByCode,
 } from "./i18n/language";
 
+function isHintOptions(options: any): options is { hints: any[] } {
+  return Array.isArray(options.hints);
+}
+
 function applyLanguageDefaults<T extends { translator?: Translator }>(
   options: T,
   language: Language | LanguageCode
@@ -17,12 +21,7 @@ function applyLanguageDefaults<T extends { translator?: Translator }>(
 
   translator.setLanguage(languageObj);
 
-  const optionsObj = options as any;
-
-  if (
-    optionsObj.hintButtonLabel !== undefined ||
-    optionsObj.hints !== undefined
-  ) {
+  if (isHintOptions(options)) {
     const defaults = getDefaultHintOptions(translator, languageObj);
     return { ...options, ...defaults, language: languageObj, translator } as T;
   }
