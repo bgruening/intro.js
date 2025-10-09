@@ -1,54 +1,81 @@
-import { getDefaultTourOptions } from "./packages/tour/option";
-import { getDefaultHintOptions } from "./packages/hint/option";
+import { getDefaultTourOptions, TourOptions } from "./packages/tour/option";
+import { getDefaultHintOptions, HintOptions } from "./packages/hint/option";
 import {
   Translator,
   Language,
   LanguageCode,
   getLanguageByCode,
 } from "./i18n/language";
+import en_US from "./i18n/en_US";
 
-function isHintOptions(options: any): options is { hints: any[] } {
-  return Array.isArray(options.hints);
+function isHintOptions(options: any): options is HintOptions {
+  return "hints" in options;
 }
 
-function applyLanguageDefaults<T extends { translator?: Translator }>(
-  options: T,
-  language: Language | LanguageCode
+/**
+ * Apply language defaults to tour or hint options.
+ * Translates all labels according to the selected language.
+ */
+export function applyLanguageDefaults<T extends TourOptions | HintOptions>(
+  options: T
 ): T {
-  const translator = options.translator!;
-  const languageObj =
-    typeof language === "string" ? getLanguageByCode(language) : language;
+  const languageObj: Language =
+    typeof options.language === "string"
+      ? getLanguageByCode(options.language as LanguageCode)
+      : options.language ?? en_US;
 
+  const translator = new Translator();
   translator.setLanguage(languageObj);
 
-  if (isHintOptions(options)) {
-    const defaults = getDefaultHintOptions(translator, languageObj);
-    return { ...options, ...defaults, language: languageObj, translator } as T;
-  }
+  const defaults = isHintOptions(options)
+    ? getDefaultHintOptions(translator)
+    : getDefaultTourOptions(translator);
 
-  const defaults = getDefaultTourOptions(translator, languageObj);
-  return { ...options, ...defaults, language: languageObj, translator } as T;
+  const {
+    nextLabel,
+    prevLabel,
+    skipLabel,
+    doneLabel,
+    stepNumbersOfLabel,
+    dontShowAgainLabel,
+    hintButtonLabel,
+    language: _,
+    ...userOptions
+  } = options as any;
+
+  return {
+    ...defaults,
+    ...userOptions,
+    language: languageObj,
+  } as T;
 }
 
-export function setOption<
-  T extends { translator?: Translator },
-  K extends keyof T
->(options: T, key: K, value: T[K]): T {
+/**
+ * Update a single option.
+ * Special handling for language: regenerates defaults in the new language.
+ */
+export function setOption<T extends TourOptions | HintOptions, K extends keyof T>(
+  options: T,
+  key: K,
+  value: T[K]
+): T {
   if (key === "language") {
-    return applyLanguageDefaults(options, value as Language | LanguageCode);
+    return applyLanguageDefaults({ ...options, language: value } as T);
   }
 
-  const result = { ...options };
-  result[key] = value;
-  return result;
+  return { ...options, [key]: value };
 }
 
-export function setOptions<T extends { translator?: Translator }>(
+/**
+ * Update multiple options at once.
+ */
+export function setOptions<T extends TourOptions | HintOptions>(
   options: T,
   partialOptions: Partial<T>
 ): T {
+  let updated = { ...options };
   for (const [key, value] of Object.entries(partialOptions)) {
-    options = setOption(options, key as keyof T, value as T[keyof T]);
+    updated = setOption(updated, key as keyof T, value as T[keyof T]);
   }
-  return options;
+  return updated;
 }
