@@ -1,12 +1,6 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { HintItem, HintPosition } from "./hintItem";
-import {
-  Translator,
-  Language,
-  LanguageCode,
-  getLanguageByCode,
-} from "../../i18n/language";
-import enUS from "../../i18n/en_US";
+import { Translator, Language, LanguageCode } from "../../i18n/language";
 
 export interface HintOptions {
   /* List of all HintItems */
@@ -42,27 +36,16 @@ export interface HintOptions {
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
   language?: Language | LanguageCode;
-  /** Injected translator instance */
-  translator: Translator;
 }
 
-export function getDefaultHintOptions(
-  translator?: Translator,
-  language: Language | LanguageCode = enUS
-): HintOptions {
-  const languageObj =
-    typeof language === "string" ? getLanguageByCode(language) : language;
-
-  const t = translator ?? new Translator(languageObj);
-  t.setLanguage(languageObj);
-
+export function getDefaultHintOptions(translator: Translator): HintOptions {
   return {
     hints: [],
     isActive: true,
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: t.translate("buttons.done"),
+    hintButtonLabel: translator.translate("buttons.done"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,
@@ -71,7 +54,6 @@ export function getDefaultHintOptions(
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
-    language,
-    translator: t,
+    language: translator.getLanguage(),
   };
 }
