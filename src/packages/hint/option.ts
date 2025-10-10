@@ -1,6 +1,8 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { HintItem, HintPosition } from "./hintItem";
 import { Translator, Language, LanguageCode } from "../../i18n/language";
+import enUS from "../../i18n/en_US";
+import { TranslatorManager } from "../../i18n/TranslatorManager";
 
 export interface HintOptions {
   /* List of all HintItems */
@@ -38,14 +40,16 @@ export interface HintOptions {
   language?: Language | LanguageCode;
 }
 
-export function getDefaultHintOptions(translator: Translator): HintOptions {
+export function getDefaultHintOptions(translator?: Translator): HintOptions {
+  const t = translator ?? TranslatorManager.createTranslator(enUS);
+
   return {
     hints: [],
     isActive: true,
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: translator.translate("buttons.done"),
+    hintButtonLabel: t.translate("buttons.done"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,
@@ -54,6 +58,6 @@ export function getDefaultHintOptions(translator: Translator): HintOptions {
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
-    language: translator.getLanguage(),
+    language: t.getLanguage(),
   };
 }

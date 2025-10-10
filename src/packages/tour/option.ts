@@ -1,6 +1,8 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
 import { Translator, Language, LanguageCode } from "../../i18n/language";
+import enUS from "../../i18n/en_US";
+import { TranslatorManager } from "../../i18n/TranslatorManager";
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -82,14 +84,16 @@ export interface TourOptions {
   language?: Language | LanguageCode;
 }
 
-export function getDefaultTourOptions(translator: Translator): TourOptions {
+export function getDefaultTourOptions(translator?: Translator): TourOptions {
+  const t = translator ?? TranslatorManager.createTranslator(enUS);
+
   return {
     steps: [],
     isActive: true,
-    nextLabel: translator.translate("buttons.next"),
-    prevLabel: translator.translate("buttons.prev"),
+    nextLabel: t.translate("buttons.next"),
+    prevLabel: t.translate("buttons.prev"),
     skipLabel: "×",
-    doneLabel: translator.translate("buttons.done"),
+    doneLabel: t.translate("buttons.done"),
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -100,7 +104,7 @@ export function getDefaultTourOptions(translator: Translator): TourOptions {
     exitOnEsc: true,
     exitOnOverlayClick: true,
     showStepNumbers: false,
-    stepNumbersOfLabel: translator.translate("messages.stepNumbersOfLabel"),
+    stepNumbersOfLabel: t.translate("messages.stepNumbersOfLabel"),
     keyboardNavigation: true,
     showButtons: true,
     showBullets: true,
@@ -114,7 +118,7 @@ export function getDefaultTourOptions(translator: Translator): TourOptions {
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: translator.translate("messages.dontShowAgain"),
+    dontShowAgainLabel: t.translate("messages.dontShowAgain"),
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
@@ -122,6 +126,6 @@ export function getDefaultTourOptions(translator: Translator): TourOptions {
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
-    language: translator.getLanguage(),
+    language: t.getLanguage(),
   };
 }
