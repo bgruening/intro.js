@@ -1,5 +1,10 @@
 import { setOption, setOptions } from "./option";
-import { Translator, Language } from "../src/i18n/language";
+import { Language } from "../src/i18n/language";
+
+Object.defineProperty(global, "navigator", {
+  value: { language: "en-US" },
+  writable: true,
+});
 
 describe("option", () => {
   describe("setOption", () => {
@@ -33,39 +38,43 @@ describe("option", () => {
     });
   });
 
-  describe("setOptions with translator", () => {
-    it("should inject translator if provided", () => {
-      const mockTranslator = new Translator({ code: "en_US", dictionary: {} });
+  describe("setOptions with language", () => {
+    it("should set language when provided", () => {
       const mockOption: any = {};
+      const newLanguage = { code: "fr_FR", dictionary: {} } as Language;
 
-      const result = setOptions(mockOption, { translator: mockTranslator });
+      const result = setOptions(mockOption, { language: newLanguage });
 
-      expect(result.translator).toBe(mockTranslator);
+      expect(result.language).toEqual(newLanguage);
     });
 
-    it("should not override translator when other options change", () => {
-      const mockTranslator = new Translator({ code: "en_US", dictionary: {} });
-      const mockOption: any = { translator: mockTranslator };
+    it("should not override language when other options change", () => {
+      const language = { code: "en_US", dictionary: {} } as Language;
+      const mockOption: any = { language };
 
       const result = setOptions(mockOption, { htmlRender: true });
 
-      expect(result.translator).toBe(mockTranslator);
+      expect(result.language).toEqual(language);
       expect(result.htmlRender).toBe(true);
     });
 
-    it("should keep htmlRender even if language changes", () => {
-      const mockTranslator = new Translator({ code: "en_US", dictionary: {} });
-      const mockOption: any = { translator: mockTranslator, htmlRender: true };
+    it("should keep other options even if language changes", () => {
+      const mockOption: any = {
+        language: { code: "en_US", dictionary: {} } as Language,
+        htmlRender: true,
+        customProp: "test",
+      };
 
       // Change language via setOption
       const newLanguage = { code: "fr_FR", dictionary: {} } as Language;
       const updatedOption = setOption(mockOption, "language", newLanguage);
 
-      // Assert translator updated
-      expect(updatedOption.translator!.getLanguage().code).toBe("fr_FR");
+      // Assert language updated
+      expect(updatedOption.language).toEqual(newLanguage);
 
-      // htmlRender should remain
+      // Other options should remain
       expect(updatedOption.htmlRender).toBe(true);
+      expect(updatedOption.customProp).toBe("test");
     });
   });
 });
