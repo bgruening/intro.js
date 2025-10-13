@@ -1,8 +1,6 @@
 import { getDefaultTourOptions, TourOptions } from "./packages/tour/option";
 import { getDefaultHintOptions, HintOptions } from "./packages/hint/option";
-import { LanguageCode, getLanguageByCode } from "./i18n/language";
-import en_US from "./i18n/en_US";
-import { TranslatorManager } from "./i18n/TranslatorManager";
+import { Translator } from "./i18n/language";
 
 function isHintOptions(options: any): options is HintOptions {
   return "hints" in options;
@@ -13,12 +11,11 @@ function isHintOptions(options: any): options is HintOptions {
  * Translator is **not** part of the public options.
  */
 function ensureTranslator(options: Partial<TourOptions | HintOptions>) {
-  const langObj =
-    typeof options.language === "string"
-      ? getLanguageByCode(options.language as LanguageCode)
-      : options.language ?? en_US;
+  const language = options.language ?? "en_US";
 
-  return TranslatorManager.createTranslator(langObj);
+  const translator = new Translator();
+  translator.setLanguage(language);
+  return translator;
 }
 
 export function applyLanguageDefaults<T extends TourOptions | HintOptions>(

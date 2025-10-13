@@ -1,5 +1,4 @@
 import { setOption, setOptions } from "./option";
-import { Language } from "../src/i18n/language";
 
 Object.defineProperty(global, "navigator", {
   value: { language: "en-US" },
@@ -41,36 +40,35 @@ describe("option", () => {
   describe("setOptions with language", () => {
     it("should set language when provided", () => {
       const mockOption: any = {};
-      const newLanguage = { code: "fr_FR", dictionary: {} } as Language;
 
-      const result = setOptions(mockOption, { language: newLanguage });
+      const result = setOptions(mockOption, { language: "fr_FR" });
 
-      expect(result.language).toEqual(newLanguage);
+      expect(result.language).toEqual("fr_FR");
     });
 
     it("should not override language when other options change", () => {
-      const language = { code: "en_US", dictionary: {} } as Language;
-      const mockOption: any = { language };
+      const mockOption: any = {
+        language: "en_US",
+      };
 
       const result = setOptions(mockOption, { htmlRender: true });
 
-      expect(result.language).toEqual(language);
+      expect(result.language).toEqual("en_US");
       expect(result.htmlRender).toBe(true);
     });
 
     it("should keep other options even if language changes", () => {
       const mockOption: any = {
-        language: { code: "en_US", dictionary: {} } as Language,
+        language: "en_US",
         htmlRender: true,
         customProp: "test",
       };
 
       // Change language via setOption
-      const newLanguage = { code: "fr_FR", dictionary: {} } as Language;
-      const updatedOption = setOption(mockOption, "language", newLanguage);
+      const updatedOption = setOption(mockOption, "language", "fr_FR");
 
       // Assert language updated
-      expect(updatedOption.language).toEqual(newLanguage);
+      expect(updatedOption.language).toEqual("fr_FR");
 
       // Other options should remain
       expect(updatedOption.htmlRender).toBe(true);
