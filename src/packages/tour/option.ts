@@ -1,8 +1,6 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
-import { Translator, Language, LanguageCode } from "../../i18n/language";
-import enUS from "../../i18n/en_US";
-import { TranslatorManager } from "../../i18n/TranslatorManager";
+import { Translator, LanguageCode } from "../../i18n/language";
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -81,11 +79,11 @@ export interface TourOptions {
    Can be a Language object for custom languages or a language code string for built-in languages.
    Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
-  language?: Language | LanguageCode;
+  language?: LanguageCode;
 }
 
 export function getDefaultTourOptions(translator?: Translator): TourOptions {
-  const t = translator ?? TranslatorManager.createTranslator(enUS);
+  const t = translator ?? new Translator();
 
   return {
     steps: [],

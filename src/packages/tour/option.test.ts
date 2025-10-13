@@ -1,6 +1,5 @@
 import { getDefaultTourOptions } from "./option";
-import { TranslatorManager } from "../../i18n/TranslatorManager";
-import enUS from "../../i18n/en_US";
+import { Translator } from "../../i18n/language";
 
 Object.defineProperty(global, "navigator", {
   value: { language: "en-US" },
@@ -10,27 +9,27 @@ Object.defineProperty(global, "navigator", {
 describe("getDefaultTourOptions", () => {
   it("should create a new Translator internally if none is injected", () => {
     const opts = getDefaultTourOptions();
-    const t = TranslatorManager.createTranslator(enUS);
-
+    const t = new Translator();
+    t.setLanguage("en_US");
     expect(opts.nextLabel).toBe(t.translate("buttons.next"));
     expect(opts.doneLabel).toBe(t.translate("buttons.done"));
-    expect(opts.language).toEqual(enUS);
+    expect(opts.language).toEqual("en_US");
   });
 
   it("should use the injected translator's language for translations", () => {
-    const language = { name: "frFR", code: "fr_FR" };
-    const translator = TranslatorManager.createTranslator(language);
+    const translator = new Translator();
+    translator.setLanguage("fr_FR");
     const opts = getDefaultTourOptions(translator);
 
     expect(opts.nextLabel).toBe(translator.translate("buttons.next"));
     expect(opts.prevLabel).toBe(translator.translate("buttons.prev"));
     expect(opts.doneLabel).toBe(translator.translate("buttons.done"));
-    expect(opts.language).toEqual(language);
+    expect(opts.language).toEqual("fr_FR");
   });
 
   it("should update all labels correctly for different languages", () => {
-    const lang = { code: "es_ES", name: "esES" };
-    const translator = TranslatorManager.createTranslator(lang);
+    const translator = new Translator();
+    translator.setLanguage("es_ES");
     const opts = getDefaultTourOptions(translator);
 
     expect(opts.nextLabel).toBe(translator.translate("buttons.next"));
@@ -40,7 +39,7 @@ describe("getDefaultTourOptions", () => {
     expect(opts.dontShowAgainLabel).toBe(
       translator.translate("messages.dontShowAgain")
     );
-    expect(opts.language).toEqual(lang);
+    expect(opts.language).toEqual("es_ES");
   });
 
   it("should always return an independent translator when called separately", () => {
@@ -48,11 +47,11 @@ describe("getDefaultTourOptions", () => {
     const opts2 = getDefaultTourOptions();
 
     expect(opts1.nextLabel).toBe(opts2.nextLabel);
-    expect(opts1.language).toEqual(enUS);
+    expect(opts1.language).toEqual("en_US");
   });
 
   it("should default to en_US if translator not provided", () => {
     const opts = getDefaultTourOptions();
-    expect(opts.language).toEqual(enUS);
+    expect(opts.language).toEqual("en_US");
   });
 });
