@@ -1,4 +1,5 @@
 import { setOption, setOptions } from "./option";
+import { Translator } from "./i18n/language";
 
 Object.defineProperty(global, "navigator", {
   value: { language: "en-US" },
@@ -13,7 +14,7 @@ describe("option", () => {
       // Act → capture return value
       const result = setOption(mockOption, "key1", "newValue1");
 
-      // Assert
+      //Assert
       expect(result.key1).toBe("newValue1");
       expect(mockOption.key1).toBe("value1");
     });
@@ -40,9 +41,9 @@ describe("option", () => {
   describe("setOptions with language", () => {
     it("should set language when provided", () => {
       const mockOption: any = {};
-
+      // Act
       const result = setOptions(mockOption, { language: "fr_FR" });
-
+      // Assert
       expect(result.language).toEqual("fr_FR");
     });
 
@@ -50,9 +51,9 @@ describe("option", () => {
       const mockOption: any = {
         language: "en_US",
       };
-
+      // Act
       const result = setOptions(mockOption, { htmlRender: true });
-
+      // Assert
       expect(result.language).toEqual("en_US");
       expect(result.htmlRender).toBe(true);
     });
@@ -63,16 +64,72 @@ describe("option", () => {
         htmlRender: true,
         customProp: "test",
       };
-
-      // Change language via setOption
+      // Act
       const updatedOption = setOption(mockOption, "language", "fr_FR");
-
-      // Assert language updated
+      // Assert
       expect(updatedOption.language).toEqual("fr_FR");
-
-      // Other options should remain
       expect(updatedOption.htmlRender).toBe(true);
       expect(updatedOption.customProp).toBe("test");
+    });
+  });
+
+  describe("Label handling and emoji overrides", () => {
+    it("should override label with emoji when language is already set", () => {
+      const options: any = {
+        language: "de_DE",
+        nextLabel: "Weiter",
+        prevLabel: "Zurück",
+        doneLabel: "Fertig",
+      };
+
+      const updated = setOptions(options, { nextLabel: "➡️" });
+
+      expect(updated.nextLabel).toBe("➡️"); // emoji kept
+      expect(updated.prevLabel).toBe("Zurück"); // other labels stay German
+      expect(updated.doneLabel).toBe("Fertig");
+    });
+
+    it("overWritten emoji label when changing language", () => {
+      const options: any = {
+        language: "de_DE",
+        nextLabel: "➡️",
+        prevLabel: "Zurück",
+        doneLabel: "Fertig",
+      };
+
+      const updated = setOptions(options, { language: "fr_FR" });
+
+      expect(updated.nextLabel).toBe("Suivant"); // emoji overWritten by French
+      const t = new Translator("fr_FR");
+      expect(updated.prevLabel).toBe(t.translate("buttons.prev")); // now French
+      expect(updated.doneLabel).toBe(t.translate("buttons.done"));
+    });
+
+    it("should retranslate all labels if none are custom", () => {
+      const options: any = { language: "en_US" };
+      const updated = setOptions(options, { language: "de_DE" });
+
+      const t = new Translator("de_DE");
+      expect(updated.nextLabel).toBe(t.translate("buttons.next"));
+      expect(updated.prevLabel).toBe(t.translate("buttons.prev"));
+      expect(updated.doneLabel).toBe(t.translate("buttons.done"));
+    });
+
+    it("should keep emoji doneLabel when language is not set", () => {
+      const defaultOptions: any = {
+        nextLabel: "Next",
+        prevLabel: "Back",
+        doneLabel: "Done",
+      };
+
+      const withEmoji = setOptions(defaultOptions, { doneLabel: "✅" });
+
+      const afterStart = setOptions(withEmoji, { isActive: true });
+
+      expect(afterStart.doneLabel).toBe("✅");
+
+      expect(afterStart.nextLabel).toBe("Next");
+      expect(afterStart.prevLabel).toBe("Back");
     });
   });
 });

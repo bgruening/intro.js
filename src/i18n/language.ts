@@ -15,6 +15,7 @@ const languages = {
 } as const;
 
 export type LanguageCode = keyof typeof languages;
+export const DefaultLanguage: LanguageCode = "en_US";
 
 /**
  * Get all available language codes
@@ -33,14 +34,14 @@ export class Translator {
       const rawLang = (
         navigator.language ||
         (navigator as any).userLanguage ||
-        "en-US"
+        DefaultLanguage
       ).replace("-", "_");
 
       const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
         (key) => key.toLowerCase() === rawLang.toLowerCase()
       );
 
-      this._languageCode = normalizedLang ?? "en_US";
+      this._languageCode = normalizedLang ?? DefaultLanguage;
     }
   }
 
