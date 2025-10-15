@@ -1,5 +1,6 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { HintItem, HintPosition } from "./hintItem";
+import { Translator, LanguageCode } from "../../i18n/language";
 
 export interface HintOptions {
   /* List of all HintItems */
@@ -30,16 +31,23 @@ export interface HintOptions {
   positionPrecedence: TooltipPosition[];
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
+  /* Optional property to set the language of the hint.
+   Can be a Language object for custom languages or a language code string for built-in languages.
+   Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
+   Defaults to the user's browser language if not provided. */
+  language?: LanguageCode;
 }
 
-export function getDefaultHintOptions(): HintOptions {
+export function getDefaultHintOptions(translator?: Translator): HintOptions {
+  const t = translator ?? new Translator();
+
   return {
     hints: [],
     isActive: true,
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: "Got it",
+    hintButtonLabel: t.translate("buttons.done"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,
@@ -48,5 +56,6 @@ export function getDefaultHintOptions(): HintOptions {
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
+    language: t.getLanguage(),
   };
 }

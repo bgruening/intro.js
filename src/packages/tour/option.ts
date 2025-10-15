@@ -1,7 +1,6 @@
 import { TooltipPosition } from "../../packages/tooltip";
 import { TourStep, ScrollTo } from "./steps";
-import { Translator, Language } from "../../i18n/language";
-import enUS from "../../i18n/en_US";
+import { Translator, LanguageCode } from "../../i18n/language";
 
 export interface TourOptions {
   steps: Partial<TourStep>[];
@@ -77,19 +76,22 @@ export interface TourOptions {
   /* Optional property to determine if content should be rendered as HTML */
   tooltipRenderAsHtml?: boolean;
   /* Optional property to set the language of the tour.
+   Can be a Language object for custom languages or a language code string for built-in languages.
+   Built-in language codes: "en_US", "es_ES", "fr_FR", "de_DE", "fa_IR"
    Defaults to the user's browser language if not provided. */
-  language?: Language;
+  language?: LanguageCode;
 }
 
-export function getDefaultTourOptions(language: Language = enUS): TourOptions {
-  const translator = new Translator(language);
+export function getDefaultTourOptions(translator?: Translator): TourOptions {
+  const t = translator ?? new Translator();
+
   return {
     steps: [],
     isActive: true,
-    nextLabel: translator.translate("buttons.next"),
-    prevLabel: translator.translate("buttons.prev"),
+    nextLabel: t.translate("buttons.next"),
+    prevLabel: t.translate("buttons.prev"),
     skipLabel: "×",
-    doneLabel: translator.translate("buttons.done"),
+    doneLabel: t.translate("buttons.done"),
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -100,7 +102,7 @@ export function getDefaultTourOptions(language: Language = enUS): TourOptions {
     exitOnEsc: true,
     exitOnOverlayClick: true,
     showStepNumbers: false,
-    stepNumbersOfLabel: translator.translate("messages.stepNumbersOfLabel"),
+    stepNumbersOfLabel: t.translate("messages.stepNumbersOfLabel"),
     keyboardNavigation: true,
     showButtons: true,
     showBullets: true,
@@ -114,7 +116,7 @@ export function getDefaultTourOptions(language: Language = enUS): TourOptions {
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: translator.translate("messages.dontShowAgain"),
+    dontShowAgainLabel: t.translate("messages.dontShowAgain"),
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
@@ -122,6 +124,6 @@ export function getDefaultTourOptions(language: Language = enUS): TourOptions {
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
-    language,
+    language: t.getLanguage(),
   };
 }

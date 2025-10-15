@@ -1,64 +1,81 @@
 import enUS from "./en_US";
 import faIR from "./fa_IR";
-import de_DE from "./de_DE";
+import deDE from "./de_DE";
 import esES from "./es_ES";
 import frFR from "./fr_FR";
 
 type MessageFormat = (...args: any[]) => string;
-type Message = string | MessageFormat;
-export type Language = { [key: string]: Message | Language };
 
-const languages: Record<string, Language> = {
+const languages = {
   en_US: enUS,
   fa_IR: faIR,
-  de_DE: de_DE,
+  de_DE: deDE,
   es_ES: esES,
   fr_FR: frFR,
-};
+} as const;
+
+export type LanguageCode = keyof typeof languages;
+export const DefaultLanguage: LanguageCode = "en_US";
+
+/**
+ * Get all available language codes
+ */
+export function getAvailableLanguages(): LanguageCode[] {
+  return Object.keys(languages) as LanguageCode[];
+}
 
 export class Translator {
-  private _language: Language;
+  private _languageCode: LanguageCode;
 
-  constructor(language?: Language) {
-    if (language) {
-      this._language = language;
+  constructor(languageCode?: LanguageCode) {
+    if (languageCode && languages[languageCode]) {
+      this._languageCode = languageCode;
     } else {
       const rawLang = (
         navigator.language ||
         (navigator as any).userLanguage ||
-        "en-US"
+        DefaultLanguage
       ).replace("-", "_");
 
-      const normalizedLang = Object.keys(languages).find(
+      const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
         (key) => key.toLowerCase() === rawLang.toLowerCase()
       );
 
-      this._language = normalizedLang ? languages[normalizedLang] : enUS;
+      this._languageCode = normalizedLang ?? DefaultLanguage;
     }
   }
 
-  setLanguage(language: Language) {
-    this._language = language;
+  setLanguage(code: LanguageCode) {
+    if (languages[code]) {
+      this._languageCode = code;
+    }
+  }
+
+  getLanguage(): LanguageCode {
+    return this._languageCode;
+  }
+
+  private get messages() {
+    return languages[this._languageCode];
   }
 
   private getString(
     message: string,
-    lang: Language = this._language
+    langObj: any = this.messages
   ): MessageFormat | null {
-    if (!lang || !message) return null;
+    if (!langObj || !message) return null;
 
     const splitted = message.split(".");
     const key = splitted[0];
 
-    if (lang[key]) {
-      const val = lang[key];
-
+    if (langObj[key]) {
+      const val = langObj[key];
       if (typeof val === "string") {
         return (): string => val;
       } else if (typeof val === "function") {
         return val;
       } else {
-        return this.getString(splitted.slice(1).join("."), val as Language);
+        return this.getString(splitted.slice(1).join("."), val);
       }
     }
 
