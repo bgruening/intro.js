@@ -5,6 +5,7 @@ import {
   dataIntroAttribute,
   dataPosition,
   dataStepAttribute,
+  dataTitleAttribute,
 } from "./dataAttributes";
 
 const { div, b, a, h1 } = dom.tags;
@@ -23,6 +24,7 @@ export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
     "Mock element second to last"
   );
   mockElementThree.setAttribute(dataStepAttribute, "10");
+  mockElementThree.setAttribute(dataTitleAttribute, "test title");
 
   const mockElementFour = a();
   mockElementFour.setAttribute(dataIntroAttribute, "Mock element last");
