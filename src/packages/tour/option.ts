@@ -102,7 +102,9 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     exitOnEsc: true,
     exitOnOverlayClick: true,
     showStepNumbers: false,
-    stepNumbersOfLabel: activeTranslator.translate("messages.stepNumbersOfLabel"),
+    stepNumbersOfLabel: activeTranslator.translate(
+      "messages.stepNumbersOfLabel"
+    ),
     keyboardNavigation: true,
     showButtons: true,
     showBullets: true,

@@ -4,8 +4,6 @@ import deDE from "./de_DE";
 import esES from "./es_ES";
 import frFR from "./fr_FR";
 
-type MessageFormat = (...args: any[]) => string;
-
 const languages = {
   en_US: enUS,
   fa_IR: faIR,
@@ -14,8 +12,15 @@ const languages = {
   fr_FR: frFR,
 } as const;
 
+export type MessageFormat = (...args: any[]) => string;
+export type Message = string | MessageFormat;
+
+export type Language = {
+  [key: string]: Message | Language;
+};
+
 export type LanguageCode = keyof typeof languages;
-export const DefaultLanguage: LanguageCode = "en_US";
+export const DefaultLanguage = Object.keys(languages)[0] as LanguageCode;
 
 /**
  * Get all available language codes
@@ -61,7 +66,7 @@ export class Translator {
 
   private getString(
     message: string,
-    langObj: any = this.messages
+    langObj: Language = this.messages
   ): MessageFormat | null {
     if (!langObj || !message) return null;
 
