@@ -47,7 +47,7 @@ export function getDefaultHintOptions(translator?: Translator): HintOptions {
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: t.translate("buttons.done"),
+    hintButtonLabel: t.translate("buttons.gotIt"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,
