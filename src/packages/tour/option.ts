@@ -83,15 +83,15 @@ export interface TourOptions {
 }
 
 export function getDefaultTourOptions(translator?: Translator): TourOptions {
-  const t = translator ?? new Translator();
+  const activeTranslator = translator ?? new Translator();
 
   return {
     steps: [],
     isActive: true,
-    nextLabel: t.translate("buttons.next"),
-    prevLabel: t.translate("buttons.prev"),
+    nextLabel: activeTranslator.translate("buttons.next"),
+    prevLabel: activeTranslator.translate("buttons.prev"),
     skipLabel: "×",
-    doneLabel: t.translate("buttons.done"),
+    doneLabel: activeTranslator.translate("buttons.done"),
     hidePrev: false,
     hideNext: false,
     nextToDone: true,
@@ -102,7 +102,7 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     exitOnEsc: true,
     exitOnOverlayClick: true,
     showStepNumbers: false,
-    stepNumbersOfLabel: t.translate("messages.stepNumbersOfLabel"),
+    stepNumbersOfLabel: activeTranslator.translate("messages.stepNumbersOfLabel"),
     keyboardNavigation: true,
     showButtons: true,
     showBullets: true,
@@ -116,7 +116,7 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     disableInteraction: false,
 
     dontShowAgain: false,
-    dontShowAgainLabel: t.translate("messages.dontShowAgain"),
+    dontShowAgainLabel: activeTranslator.translate("messages.dontShowAgain"),
     dontShowAgainCookie: "introjs-dontShowAgain",
     dontShowAgainCookieDays: 365,
     helperElementPadding: 10,
@@ -124,6 +124,6 @@ export function getDefaultTourOptions(translator?: Translator): TourOptions {
     buttonClass: "introjs-button",
     progressBarAdditionalClass: "",
     tooltipRenderAsHtml: true,
-    language: t.getLanguage(),
+    language: activeTranslator.getLanguage(),
   };
 }
