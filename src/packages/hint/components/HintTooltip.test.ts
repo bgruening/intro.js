@@ -1,6 +1,7 @@
 import { HintTooltip } from "./HintTooltip";
 import { HintItem } from "../hintItem";
 import dom from "../../dom";
+import { TourStep } from "src/packages/tour/steps";
 
 describe("HintTooltip", () => {
   test("should apply custom className to tooltip content container", () => {
@@ -14,6 +15,15 @@ describe("HintTooltip", () => {
       position: "bottom",
       hintTooltipElement: element,
       hintPosition: "bottom-middle",
+    };
+
+    const steps: TourStep = {
+      step: 1,
+      intro: "Test intro",
+      element: element,
+      title: "Test title",
+      position: "bottom",
+      scrollTo: "tooltip",
     };
 
     const closeButtonHandler = jest.fn();
@@ -32,6 +42,7 @@ describe("HintTooltip", () => {
       positionPrecedence: ["top", "bottom"],
       refreshes: dom.state(0),
       showStepNumbers: true,
+      step: steps,
     });
 
     document.body.appendChild(tooltip);
