@@ -1,5 +1,5 @@
 module.exports = {
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   clearMocks: true,
   setupFilesAfterEnv: ["jest-extended/all"],
   roots: ["<rootDir>/tests/jest", "<rootDir>/src"],
