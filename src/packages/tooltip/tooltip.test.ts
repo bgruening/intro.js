@@ -55,7 +55,7 @@ describe("Tour Tooltip", () => {
         autoPosition: false,
         positionPrecedence: ["top", "bottom"],
         hintMode: false,
-        step,
+        text: step.title || step.intro,
       });
 
       expect(tooltip.className).toContain("custom-tooltip");
