@@ -521,7 +521,7 @@ export const TourTooltip = ({
       element: step.element as HTMLElement,
       hintMode: false,
       position,
-      step,
+      text: title || text,
     },
     children
   );
