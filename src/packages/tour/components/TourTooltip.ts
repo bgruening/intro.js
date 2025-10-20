@@ -341,16 +341,19 @@ export const Header = ({
   renderAsHtml?: boolean;
   onSkipClick: (e: any) => void;
 }) => {
-  const titleEl = TooltipContent({
-    text: title,
-    tooltipRenderAsHtml: renderAsHtml,
-    container: h1({
-      className: tooltipTitleClassName,
-      role: "heading",
-      "aria-level": 1,
-      "aria-label": title,
-    }),
-  });
+  const titleEl = title
+    ? TooltipContent({
+        text: title,
+        tooltipRenderAsHtml: renderAsHtml,
+        container: h1({
+          className: tooltipTitleClassName,
+          role: "heading",
+          "aria-level": 1,
+          "aria-label": title,
+        }),
+      })
+    : null;
+
   return div({ className: tooltipHeaderClassName }, [
     titleEl,
     Button({

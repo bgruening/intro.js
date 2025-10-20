@@ -11,6 +11,7 @@ describe("Tour Tooltip", () => {
   beforeEach(() => {
     jest.resetAllMocks();
     jest.setTimeout(50000);
+    document.body.innerHTML = "";
     container = document.createElement("main");
     container.setAttribute("role", "main");
     document.body.appendChild(container);
