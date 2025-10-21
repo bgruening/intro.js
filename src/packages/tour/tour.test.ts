@@ -19,7 +19,6 @@ import {
   waitMsForExitTransition,
 } from "../../util/sleep";
 import { axe, toHaveNoViolations } from "jest-axe";
-
 expect.extend(toHaveNoViolations);
 jest.setTimeout(40000);
 
@@ -46,6 +45,19 @@ describe("Tour", () => {
 
       // Assert
       expect(tour.getTargetElement()).toBe(stubTargetElement);
+    });
+
+    test("should merge user options with default options", () => {
+      // Arrange
+      const userOptions = { showStepNumbers: true };
+
+      // Act
+      const tour = new Tour(undefined, userOptions);
+
+      // Assert
+      expect(tour.getOption("showStepNumbers")).toBe(true);
+      expect(tour.getOption("showButtons")).toBe(true);
+      expect(tour.getOption("exitOnEsc")).toBe(true);
     });
   });
 
