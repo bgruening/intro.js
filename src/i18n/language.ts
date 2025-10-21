@@ -12,19 +12,11 @@ const languages = {
   fr_FR: frFR,
 } as const;
 
-export type MessageFormat = (...args: any[]) => string;
-export type Message = string | MessageFormat;
-
-export type Language = {
-  [key: string]: Message | Language;
-};
-
 export type LanguageCode = keyof typeof languages;
-export const DefaultLanguage = Object.keys(languages)[0] as LanguageCode;
+export const DefaultLanguage: LanguageCode = Object.keys(
+  languages
+)[0] as LanguageCode;
 
-/**
- * Get all available language codes
- */
 export function getAvailableLanguages(): LanguageCode[] {
   return Object.keys(languages) as LanguageCode[];
 }
@@ -42,18 +34,15 @@ export class Translator {
         DefaultLanguage
       ).replace("-", "_");
 
-      const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
-        (key) => key.toLowerCase() === rawLang.toLowerCase()
-      );
-
-      this._languageCode = normalizedLang ?? DefaultLanguage;
+      this._languageCode =
+        (Object.keys(languages).find(
+          (key) => key.toLowerCase() === rawLang.toLowerCase()
+        ) as LanguageCode) ?? DefaultLanguage;
     }
   }
 
   setLanguage(code: LanguageCode) {
-    if (languages[code]) {
-      this._languageCode = code;
-    }
+    if (languages[code]) this._languageCode = code;
   }
 
   getLanguage(): LanguageCode {
@@ -64,31 +53,21 @@ export class Translator {
     return languages[this._languageCode];
   }
 
-  private getString(
-    message: string,
-    langObj: Language = this.messages
-  ): MessageFormat | null {
-    if (!langObj || !message) return null;
+  private getString(key: string, obj = this.messages): string | undefined {
+    const parts = key.split(".");
+    let current = obj;
 
-    const splitted = message.split(".");
-    const key = splitted[0];
+    for (const part of parts) {
+      if (typeof current === "string") return undefined;
+      if (!(part in current)) return undefined;
 
-    if (langObj[key]) {
-      const val = langObj[key];
-      if (typeof val === "string") {
-        return (): string => val;
-      } else if (typeof val === "function") {
-        return val;
-      } else {
-        return this.getString(splitted.slice(1).join("."), val);
-      }
+      current = (current as Record<string, any>)[part];
     }
 
-    return null;
+    return typeof current === "string" ? current : undefined;
   }
 
-  translate(message: string, ...args: any[]): string {
-    const translated = this.getString(message);
-    return translated ? translated(...args) : message;
+  translate(key: string, fallback?: string): string {
+    return this.getString(key) ?? fallback ?? key;
   }
 }
