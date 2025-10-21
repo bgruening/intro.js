@@ -4,6 +4,7 @@ export default {
     prev: "Zurück",
     skip: "Überspringen",
     done: "Fertig",
+    gotIt: "Verstanden",
   },
   messages: {
     dontShowAgainLabel: "Nicht wieder anzeigen",

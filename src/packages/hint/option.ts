@@ -39,7 +39,7 @@ export interface HintOptions {
 }
 
 export function getDefaultHintOptions(translator?: Translator): HintOptions {
-  const t = translator ?? new Translator();
+  const activeTranslator = translator ?? new Translator();
 
   return {
     hints: [],
@@ -47,7 +47,7 @@ export function getDefaultHintOptions(translator?: Translator): HintOptions {
     tooltipPosition: "bottom",
     tooltipClass: "",
     hintPosition: "top-middle",
-    hintButtonLabel: t.translate("buttons.done"),
+    hintButtonLabel: activeTranslator.translate("buttons.gotIt"),
     hintShowButton: true,
     hintAutoRefreshInterval: 10,
     hintAnimation: true,
@@ -56,6 +56,6 @@ export function getDefaultHintOptions(translator?: Translator): HintOptions {
     autoPosition: true,
     positionPrecedence: ["bottom", "top", "right", "left"],
     tooltipRenderAsHtml: true,
-    language: t.getLanguage(),
+    language: activeTranslator.getLanguage(),
   };
 }
