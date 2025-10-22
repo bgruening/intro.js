@@ -32,6 +32,7 @@ describe("HintTooltip", () => {
       positionPrecedence: ["top", "bottom"],
       refreshes: dom.state(0),
       showStepNumbers: true,
+      text: "Test hint",
     });
 
     document.body.appendChild(tooltip);

@@ -1,15 +1,18 @@
 import "regenerator-runtime/runtime";
-//@ts-ignore
-import { JSDOM } from "jsdom";
-//import * as matchers from "jest-extended";
-//import expect from "expect";
+import { TextEncoder, TextDecoder } from "util";
 
-//expect.extend(matchers);
+// ✅ Polyfill for environments missing these (keeps it safe)
+if (typeof global.TextEncoder === "undefined") {
+  (global as any).TextEncoder = TextEncoder;
+}
+if (typeof global.TextDecoder === "undefined") {
+  (global as any).TextDecoder = TextDecoder;
+}
 
-const dom = new JSDOM();
-global.document = dom.window.document;
-global.window = dom.window;
-global.Element = dom.window.Element;
-global.Text = dom.window.Text;
-global.Event = dom.window.Event;
-global.SVGElement = dom.window.SVGElement;
+// ✅ Use Jest's built-in JSDOM globals, not your own instance
+// The testEnvironment: "jsdom" already provides `window`, `document`, `Element`, `SVGElement`, etc.
+// You don’t need to create a new JSDOM manually.
+
+// ✅ Optional custom matchers (uncomment if you use them)
+// import * as matchers from "jest-extended";
+// expect.extend(matchers);

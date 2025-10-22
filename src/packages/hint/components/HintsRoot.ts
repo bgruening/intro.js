@@ -86,6 +86,7 @@ export const HintsRoot = ({ hint }: HintsRootProps) => {
       closeButtonClassName: hint.getOption("buttonClass"),
       closeButtonOnClick: (hintItem: HintItem) => hideHint(hint, hintItem),
       className: hint.getOption("tooltipClass"),
+      text: hintItem.hint,
     });
 
     dom.add(root, referenceLayer);

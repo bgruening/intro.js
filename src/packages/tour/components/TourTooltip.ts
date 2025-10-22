@@ -331,28 +331,29 @@ const Buttons = ({
 };
 
 export const Header = ({
-  text,
   title,
   skipLabel,
   renderAsHtml,
   onSkipClick,
 }: {
-  text: string;
   title: string;
   skipLabel: string;
   renderAsHtml?: boolean;
   onSkipClick: (e: any) => void;
 }) => {
-  const titleEl = TooltipContent({
-    text: title,
-    tooltipRenderAsHtml: renderAsHtml,
-    container: h1({
-      className: tooltipTitleClassName,
-      role: "heading",
-      "aria-level": 1,
-      "aria-label": title,
-    }),
-  });
+  const titleEl = title
+    ? TooltipContent({
+        text: title,
+        tooltipRenderAsHtml: renderAsHtml,
+        container: h1({
+          className: tooltipTitleClassName,
+          role: "heading",
+          "aria-level": 1,
+          "aria-label": title,
+        }),
+      })
+    : null;
+
   return div({ className: tooltipHeaderClassName }, [
     titleEl,
     Button({
@@ -468,7 +469,7 @@ export const TourTooltip = ({
   const text = step.intro;
   const position = step.position;
 
-  children.push(Header({ text, title, skipLabel, renderAsHtml, onSkipClick }));
+  children.push(Header({ title, skipLabel, renderAsHtml, onSkipClick }));
 
   children.push(
     TooltipContent({
@@ -523,7 +524,7 @@ export const TourTooltip = ({
       element: step.element as HTMLElement,
       hintMode: false,
       position,
-      step,
+      text: title || text,
     },
     children
   );

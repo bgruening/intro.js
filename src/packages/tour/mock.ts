@@ -5,11 +5,21 @@ import {
   dataIntroAttribute,
   dataPosition,
   dataStepAttribute,
+  dataTitleAttribute,
 } from "./dataAttributes";
 
 const { div, b, a, h1 } = dom.tags;
 
 export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
+  // ✅ Create a single region container instead of <main>
+  let region = targetElement.querySelector('[role="region"]');
+  if (!region) {
+    region = document.createElement("section");
+    region.setAttribute("role", "region");
+    region.setAttribute("aria-label", "Mock steps region");
+    targetElement.appendChild(region);
+  }
+
   const mockElementOne = div();
   mockElementOne.setAttribute(dataIntroAttribute, "Mock element");
 
@@ -17,21 +27,24 @@ export const appendMockSteps = (targetElement: HTMLElement = document.body) => {
   mockElementTwo.setAttribute(dataIntroAttribute, "Mock element left position");
   mockElementTwo.setAttribute(dataPosition, "left");
 
-  const mockElementThree = h1();
+  const mockElementThree = h1("Mock heading");
   mockElementThree.setAttribute(
     dataIntroAttribute,
     "Mock element second to last"
   );
   mockElementThree.setAttribute(dataStepAttribute, "10");
+  mockElementThree.setAttribute(dataTitleAttribute, "test title");
+  mockElementThree.setAttribute("aria-label", "Mock heading");
 
-  const mockElementFour = a();
+  const mockElementFour = a("Mock element last");
   mockElementFour.setAttribute(dataIntroAttribute, "Mock element last");
   mockElementFour.setAttribute(dataStepAttribute, "20");
 
-  targetElement.appendChild(mockElementOne);
-  targetElement.appendChild(mockElementTwo);
-  targetElement.appendChild(mockElementThree);
-  targetElement.appendChild(mockElementFour);
+  // ✅ Append inside region, not <main>
+  region.appendChild(mockElementOne);
+  region.appendChild(mockElementTwo);
+  region.appendChild(mockElementThree);
+  region.appendChild(mockElementFour);
 
   return [mockElementOne, mockElementTwo, mockElementThree, mockElementFour];
 };
