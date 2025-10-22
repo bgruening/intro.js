@@ -13,9 +13,8 @@ const languages = {
 } as const;
 
 export type LanguageCode = keyof typeof languages;
-export const DefaultLanguage: LanguageCode = Object.keys(
-  languages
-)[0] as LanguageCode;
+export const DefaultLanguage = Object.keys(languages)[0] as LanguageCode;
+type Messages = { [key: string]: string | Messages };
 
 export function getAvailableLanguages(): LanguageCode[] {
   return Object.keys(languages) as LanguageCode[];
@@ -34,15 +33,18 @@ export class Translator {
         DefaultLanguage
       ).replace("-", "_");
 
-      this._languageCode =
-        (Object.keys(languages).find(
-          (key) => key.toLowerCase() === rawLang.toLowerCase()
-        ) as LanguageCode) ?? DefaultLanguage;
+      const normalizedLang = (Object.keys(languages) as LanguageCode[]).find(
+        (key) => key.toLowerCase() === rawLang.toLowerCase()
+      );
+
+      this._languageCode = normalizedLang ?? DefaultLanguage;
     }
   }
 
   setLanguage(code: LanguageCode) {
-    if (languages[code]) this._languageCode = code;
+    if (languages[code]) {
+      this._languageCode = code;
+    }
   }
 
   getLanguage(): LanguageCode {
@@ -53,21 +55,22 @@ export class Translator {
     return languages[this._languageCode];
   }
 
-  private getString(key: string, obj = this.messages): string | undefined {
-    const parts = key.split(".");
-    let current = obj;
+  private getString(
+    message: string,
+    obj: Messages = this.messages
+  ): string | null {
+    const parts = message.split(".");
+    let current: Messages | string = obj;
 
     for (const part of parts) {
-      if (typeof current === "string") return undefined;
-      if (!(part in current)) return undefined;
-
-      current = (current as Record<string, any>)[part];
+      if (typeof current !== "object" || !(part in current)) return null;
+      current = current[part];
     }
 
-    return typeof current === "string" ? current : undefined;
+    return typeof current === "string" ? current : null;
   }
 
-  translate(key: string, fallback?: string): string {
-    return this.getString(key) ?? fallback ?? key;
+  translate(message: string): string {
+    return this.getString(message) ?? message;
   }
 }
