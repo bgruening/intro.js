@@ -45,7 +45,7 @@ export class Hint implements Package<HintOptions> {
   ) {
     this._targetElement = getContainerElement(elementOrSelector);
     this._options = options
-      ? setOptions(this._options, options)
+      ? setOptions(this._options, { ...getDefaultHintOptions(), ...options })
       : getDefaultHintOptions();
   }
 

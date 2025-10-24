@@ -62,7 +62,7 @@ export class Tour implements Package<TourOptions> {
   ) {
     this._targetElement = getContainerElement(elementOrSelector);
     this._options = options
-      ? setOptions(this._options, options)
+      ? setOptions(this._options, { ...getDefaultTourOptions(), ...options })
       : getDefaultTourOptions();
   }
 
