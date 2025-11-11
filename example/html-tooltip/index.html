@@ -70,8 +70,22 @@
     </div>
     <script type="text/javascript" src="../../dist/intro.js"></script>
     <script type="text/javascript">
+      function onBeforeChange () {
+  const currentStep = this.getCurrentStep();
+
+  // اگر رسیدیم به استپ سوم (index = 2)
+  if (currentStep >= 2) {
+    return Promise.resolve(false); // نرو به استپ بعد
+  }
+
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(true), 5000);
+  });
+}
       function startIntro(){
         var intro = introJs.tour();
+        intro.onBeforeChange(onBeforeChange)
+
           intro.setOptions({
             hideNext: true,
             language: 'de_DE',
