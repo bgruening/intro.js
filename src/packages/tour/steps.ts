@@ -44,11 +44,7 @@ export async function nextStep(tour: Tour) {
     return false;
   }
 
-  const changed = await tour.setCurrentStep(nextStepIndex);
-  if (!changed) {
-    return false;
-  }
-
+  await tour.setCurrentStep(nextStepIndex);
   const nextStep = tour.getStep(nextStepIndex);
   await showElement(tour, nextStep);
 
@@ -74,11 +70,7 @@ export async function previousStep(tour: Tour) {
     return false;
   }
 
-  const changed = await tour.setCurrentStep(prevStepIndex);
-  if (!changed) {
-    return false;
-  }
-
+  await tour.setCurrentStep(prevStepIndex);
   await showElement(tour, prevStep);
 
   return true;
