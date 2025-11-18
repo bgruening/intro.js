@@ -234,12 +234,12 @@ export class Tour implements Package<TourOptions> {
   /**
    * Increment the current step of the tour (does not start the tour step, must be called in conjunction with `nextStep`)
    */
-  incrementCurrentStep(): this {
+  async incrementCurrentStep(): Promise<this> {
     const currentStep = this.getCurrentStep();
     if (currentStep === undefined) {
-      this.setCurrentStep(0);
+      await this.setCurrentStep(0);
     } else {
-      this.setCurrentStep(currentStep + 1);
+      await this.setCurrentStep(currentStep + 1);
     }
 
     return this;
@@ -248,10 +248,10 @@ export class Tour implements Package<TourOptions> {
   /**
    * Decrement the current step of the tour (does not start the tour step, must be in conjunction with `previousStep`)
    */
-  decrementCurrentStep(): this {
+  async decrementCurrentStep(): Promise<this>  {
     const currentStep = this.getCurrentStep();
     if (currentStep !== undefined && currentStep > 0) {
-      this.setCurrentStep(currentStep - 1);
+      await this.setCurrentStep(currentStep - 1);
     }
 
     return this;

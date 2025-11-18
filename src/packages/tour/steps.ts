@@ -35,17 +35,16 @@ export type TourStep = {
  * @api private
  */
 export async function nextStep(tour: Tour) {
-  let currentStep = tour.getCurrentStep();
-  const nextStepIndex = currentStep !== undefined ? currentStep + 1 : 0;
-
   if (tour.isEnd()) {
     await tour.callback("complete")?.call(tour, tour.getCurrentStep(), "end");
     await tour.exit();
     return false;
   }
 
-  await tour.setCurrentStep(nextStepIndex);
-  const nextStep = tour.getStep(nextStepIndex);
+  await tour.incrementCurrentStep();
+
+  const currentStep = tour.getCurrentStep();
+  const nextStep = tour.getStep(currentStep!);
   await showElement(tour, nextStep);
 
   return true;
@@ -58,19 +57,14 @@ export async function nextStep(tour: Tour) {
  */
 export async function previousStep(tour: Tour) {
   const currentStep = tour.getCurrentStep();
-
   if (currentStep === undefined || currentStep <= 0) {
     return false;
   }
 
-  const prevStepIndex = currentStep - 1;
-  const prevStep = tour.getStep(prevStepIndex);
+  await tour.decrementCurrentStep();
 
-  if (!prevStep) {
-    return false;
-  }
-
-  await tour.setCurrentStep(prevStepIndex);
+  const newStep = tour.getCurrentStep()!;
+  const prevStep = tour.getStep(newStep);
   await showElement(tour, prevStep);
 
   return true;
