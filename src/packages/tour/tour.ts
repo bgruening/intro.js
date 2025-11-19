@@ -248,7 +248,7 @@ export class Tour implements Package<TourOptions> {
   /**
    * Decrement the current step of the tour (does not start the tour step, must be in conjunction with `previousStep`)
    */
-  async decrementCurrentStep(): Promise<this>  {
+  async decrementCurrentStep(): Promise<this> {
     const currentStep = this.getCurrentStep();
     if (currentStep !== undefined && currentStep > 0) {
       await this.setCurrentStep(currentStep - 1);

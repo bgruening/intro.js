@@ -10,7 +10,12 @@ import {
   waitFor,
 } from "../../../tests/jest/helper";
 import * as dontShowAgain from "./dontShowAgain";
-import { appendMockSteps, getMockPartialSteps, getMockTour } from "./mock";
+import {
+  appendMockSteps,
+  getMockPartialSteps,
+  getMockTour,
+  getMockSteps,
+} from "./mock";
 import { Tour } from "./tour";
 import { helperLayerClassName, overlayClassName } from "./classNames";
 import {
@@ -733,5 +738,44 @@ describe("Tour", () => {
         await mockTour.nextStep();
       }
     }
+  });
+
+  describe("setCurrentStep", () => {
+    test("should call beforeChange and proceed when callback returns true", async () => {
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+
+      const fnBeforeChange = jest.fn().mockResolvedValue(true);
+      mockTour.onBeforeChange(fnBeforeChange);
+
+      const result = await mockTour.setCurrentStep(1);
+
+      expect(result).toBe(true);
+      expect(fnBeforeChange).toHaveBeenCalledTimes(1);
+      expect(mockTour.getCurrentStep()).toBe(1);
+    });
+
+    test("should allow backward step even if callback returns false", async () => {
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+      mockTour.setCurrentStep(1);
+
+      const fnBeforeChange = jest.fn().mockResolvedValue(false);
+      mockTour.onBeforeChange(fnBeforeChange);
+
+      const result = await mockTour.setCurrentStep(0);
+
+      expect(result).toBe(true);
+      expect(fnBeforeChange).toHaveBeenCalledTimes(1);
+      expect(mockTour.getCurrentStep()).toBe(0);
+    });
+
+    test("should return false if target step does not exist", async () => {
+      const mockTour = getMockTour();
+      mockTour.setSteps(getMockSteps());
+
+      const result = await mockTour.setCurrentStep(999);
+      expect(result).toBe(false);
+    });
   });
 });
