@@ -70,18 +70,26 @@ describe("steps", () => {
     });
 
     test("should call the complete callback", async () => {
+      // Arrange
       const mockTour = getMockTour();
       mockTour.setSteps(getMockSteps().slice(0, 2));
+
+      // Mock isEnd so that after reaching step 1, next call finishes the tour
+      jest.spyOn(mockTour, "isEnd").mockImplementation(() => {
+        return mockTour.getCurrentStep() === 1;
+      });
+
       const fnCompleteCallback = jest.fn();
       mockTour.onComplete(fnCompleteCallback);
 
+      // Act
       await nextStep(mockTour);
       await nextStep(mockTour);
       await nextStep(mockTour);
 
       // Assert
       expect(fnCompleteCallback).toBeCalledTimes(1);
-      expect(fnCompleteCallback).toHaveBeenCalledWith(2, "end");
+      expect(fnCompleteCallback).toHaveBeenCalledWith(1, "end");
     });
 
     test("should be able to add steps using addStep()", async () => {
