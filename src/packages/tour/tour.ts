@@ -203,11 +203,11 @@ export class Tour implements Package<TourOptions> {
    * Set the current step of the tour and the direction of the tour
    * @param step
    */
-  async setCurrentStep(step: number): Promise<boolean> {
-    const currentStep = this._currentStepSignal.val;
+  async setCurrentStep(step: number): Promise<this> {
     const targetStep = this.getStep(step);
-    if (!targetStep) return false;
+    if (!targetStep) return this;
 
+    const currentStep = this._currentStepSignal.val;
     const direction =
       currentStep === undefined || step >= currentStep ? "forward" : "backward";
 
@@ -223,12 +223,12 @@ export class Tour implements Package<TourOptions> {
       continueStep === false &&
       currentStep !== undefined
     ) {
-      return false;
+      return this;
     }
 
     this._direction = direction;
     this._currentStepSignal.val = step;
-    return true;
+    return this;
   }
 
   /**

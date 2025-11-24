@@ -73,9 +73,8 @@
       function onBeforeChange () {
   const currentStep = this.getCurrentStep();
 
-  // اگر رسیدیم به استپ سوم (index = 2)
   if (currentStep >= 2) {
-    return Promise.resolve(false); // نرو به استپ بعد
+    return Promise.resolve(false);
   }
 
   return new Promise((resolve) => {
