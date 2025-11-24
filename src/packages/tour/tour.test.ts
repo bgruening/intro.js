@@ -748,9 +748,10 @@ describe("Tour", () => {
       const fnBeforeChange = jest.fn().mockResolvedValue(true);
       mockTour.onBeforeChange(fnBeforeChange);
 
-      const result = await mockTour.setCurrentStep(1);
+      // Act
+      await mockTour.setCurrentStep(1);
 
-      expect(result).toBe(true);
+      // Assert
       expect(fnBeforeChange).toHaveBeenCalledTimes(1);
       expect(mockTour.getCurrentStep()).toBe(1);
     });
@@ -763,19 +764,24 @@ describe("Tour", () => {
       const fnBeforeChange = jest.fn().mockResolvedValue(false);
       mockTour.onBeforeChange(fnBeforeChange);
 
-      const result = await mockTour.setCurrentStep(0);
+      // Act
+      await mockTour.setCurrentStep(0);
 
-      expect(result).toBe(true);
+      // Assert
       expect(fnBeforeChange).toHaveBeenCalledTimes(1);
       expect(mockTour.getCurrentStep()).toBe(0);
     });
 
-    test("should return false if target step does not exist", async () => {
+    test("should return early if target step does not exist", async () => {
       const mockTour = getMockTour();
       mockTour.setSteps(getMockSteps());
 
+      // Act
       const result = await mockTour.setCurrentStep(999);
-      expect(result).toBe(false);
+
+      // Assert
+      expect(result).toBe(mockTour);
+      expect(mockTour.getCurrentStep()).toBe(undefined);
     });
   });
 });
