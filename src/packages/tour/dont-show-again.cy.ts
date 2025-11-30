@@ -53,7 +53,7 @@ context("Don't show again checkbox", () => {
 
       cy.wait(500);
 
-      cy.compareSnapshot("dont-show-again-checkbox-first-step");
+      cy.compareSnapshot("dont-show-again-clicked-first-step");
 
       cy.get(".introjs-dontShowAgain input").click();
 
